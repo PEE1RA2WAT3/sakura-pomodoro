@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Sakura Pomodoro</title>
 <meta name="theme-color" content="#3a1f2b">
 <link rel="manifest" href="manifest.webmanifest">
@@ -19,9 +19,10 @@
   :root{ --accent:#ff8fab; --glow:rgba(255,143,171,.55); --ink:#3a1f2b; --cream:#fff4e6; }
   body.break{ --accent:#ffbf73; --glow:rgba(255,191,115,.6); }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;overflow:hidden;background:#3a1f2b;color:var(--cream);
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;background:#3a1f2b;color:var(--cream);
     font-family:'Press Start 2P',ui-monospace,monospace;-webkit-font-smoothing:none}
-  canvas#scene{position:fixed;left:0;top:0;image-rendering:pixelated;image-rendering:crisp-edges}
+  .stage{position:fixed;inset:0;overflow:hidden;z-index:0}
+  canvas#scene{position:absolute;left:0;top:0;image-rendering:pixelated;image-rendering:crisp-edges}
   .fx{position:fixed;inset:0;pointer-events:none;
     background:radial-gradient(ellipse at 50% 42%,transparent 55%,rgba(58,20,40,.35) 100%)}
   .ui{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;
@@ -109,7 +110,7 @@
 </style>
 </head>
 <body>
-<canvas id="scene" aria-hidden="true"></canvas>
+<div class="stage" id="stage"><canvas id="scene" aria-hidden="true"></canvas></div>
 <div class="fx"></div>
 
 <main class="ui">
@@ -182,8 +183,19 @@ let lanterns = [], windows = [], toros = [], trees = [], branchSpots = [], cloud
 let petals = [], landed = [], people = [];
 let time = 0, theme = 0, themeTarget = 0;   // theme 0 = บ่ายแดดทอง (focus), 1 = ค่ำโคมไฟ (break)
 
+// ขนาดจอจริง: วัดจากกรอบที่คลุมทั้งจอ และบน iPhone (เปิดจากไอคอนหน้าจอโฮม) ใช้ขนาดหน้าจอเต็มๆ
+// เพื่อให้ฉากเต็มถึงขอบล่าง ไม่เหลือแถบสีเข้ม
+function viewSize(){
+  const r = document.getElementById('stage').getBoundingClientRect();
+  let w = Math.max(r.width, innerWidth), h = Math.max(r.height, innerHeight);
+  if(navigator.standalone){
+    const a = Math.min(screen.width, screen.height), b = Math.max(screen.width, screen.height);
+    if(w > h){ w = Math.max(w, b); h = Math.max(h, a); } else { w = Math.max(w, a); h = Math.max(h, b); }
+  }
+  return [Math.round(w), Math.round(h)];
+}
 function resize(){
-  const vw = innerWidth, vh = innerHeight;
+  const [vw, vh] = viewSize();
   lastVW = vw; lastVH = vh;
   P = Math.max(3, Math.round(vh / (vw < vh ? 210 : 165)));   // ขนาด 1 พิกเซลบนจอจริง
   W = Math.ceil(vw / P); H = Math.ceil(vh / P);
@@ -737,9 +749,15 @@ function frame(now){
 // ขนาดจอเปลี่ยน (หมุนมือถือ / ย่อหน้าต่าง): iPhone มักรายงานขนาดใหม่ช้ากว่าเหตุการณ์ resize
 // เลยเช็กขนาดจอซ้ำเรื่อยๆ ในลูปแอนิเมชันด้วย ถ้าไม่ตรงกับที่วาดไว้ก็วาดฉากใหม่
 let lastVW=0, lastVH=0, sizeCheck=0;
-function checkSize(){ if(innerWidth!==lastVW || innerHeight!==lastVH) resize(); }
+function checkSize(){ const [w,h]=viewSize(); if(w!==lastVW || h!==lastVH) resize(); }
 addEventListener('resize', ()=>{ clearTimeout(resize.t); resize.t=setTimeout(checkSize,120); });
 addEventListener('orientationchange', ()=>{ setTimeout(checkSize,300); setTimeout(checkSize,900); });
+// ห้ามซูม: กันการถ่างนิ้ว (pinch) และแตะสองครั้ง แล้วถ้าจอถูกซูมค้างอยู่ก็ดึงกลับ
+for(const ev of ['gesturestart','gesturechange','gestureend']) document.addEventListener(ev, e=>e.preventDefault(), {passive:false});
+document.addEventListener('touchmove', e=>{ if(e.touches.length>1) e.preventDefault(); }, {passive:false});
+let lastTouchEnd=0;
+document.addEventListener('touchend', e=>{ const n=Date.now(); if(n-lastTouchEnd<300 && !e.target.closest('button,input,label')) e.preventDefault(); lastTouchEnd=n; }, {passive:false});
+addEventListener('scroll', ()=>{ if(scrollX||scrollY) scrollTo(0,0); });
 resize();
 requestAnimationFrame(frame);
 
