@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sakura Pomodoro</title>
+<meta name="theme-color" content="#3a1f2b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sakura">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABf0lEQVR4Xu2WMW7CQBBFDcoBaE3tUEKVJjcgR0B0uUOUIyDfwV3EEcgN0qSCktC75QZEszuznp2MzRqEdiPxJIQW1vbMn/k7zrI7F7Asnk/woUvlug8PfTYD8LDyZWEv22QmCL7+OHwN+txz2GfzLQhWgCSHbPN3q0CJEeXzp2aNqoQq8X8U0KDMr0EtAe/wS9HuoZUlegk8y/BGC4FKUH9+h2zP3jZrs48rEV0BtQcoUmM5tBgB2eavO7OsK/trs542+2ePds9q7e6n4UrgnXDC3xKS/Lg/mL9Gk8IGIoLlQXMgQSpDOiUwEcmzHWTc/njRQ/aUOSHXbWok2YTq5OqyIzRcXU1Nln96gP0naw6kfxBJzjpjbH1IinAXkFN4x2t0zgLtHODQgz3Q/zl+m5HdMaLTsWEbJKWTV7GmB9o2dD6kr4CbC5gm1JY3GOBeSqEhcTLyedKF2oTOr9g8XuOx4SL3UZDyDND8T0QvQfA7PH/FassoZI8kugJ3ovMLXtO1k27+Iu0AAAAASUVORK5CYII=">
+<style>
+  /* Press Start 2P by CodeMan38, SIL Open Font License 1.1. Embedded so the app works offline. */
+  @font-face{font-family:"Press Start 2P";src:url(data:font/woff2;base64,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) format("woff2");font-display:block}
+
+  :root{ --accent:#ff8fab; --glow:rgba(255,143,171,.55); --ink:#3a1f2b; --cream:#fff4e6; }
+  body.break{ --accent:#ffbf73; --glow:rgba(255,191,115,.6); }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;background:#3a1f2b;color:var(--cream);
+    font-family:'Press Start 2P',ui-monospace,monospace;-webkit-font-smoothing:none}
+  canvas#scene{position:fixed;left:0;top:0;image-rendering:pixelated;image-rendering:crisp-edges}
+  .fx{position:fixed;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 42%,transparent 55%,rgba(58,20,40,.35) 100%)}
+  .ui{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:clamp(10px,2.3vh,22px);padding:16px 16px 10vh;text-align:center}
+  h1{font-size:clamp(22px,5vw,36px);font-weight:400;letter-spacing:2px;
+    text-shadow:3px 3px 0 var(--ink),0 0 14px var(--glow)}
+  .hint{margin-top:10px;font-size:9px;text-shadow:2px 2px 0 var(--ink);min-height:10px}
+  .hint.blink{animation:blink 1.4s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  button{font-family:inherit;cursor:pointer;color:var(--cream);background:rgba(58,31,43,.66);
+    border:3px solid var(--cream);padding:10px 12px;font-size:9px;letter-spacing:1px;
+    box-shadow:4px 4px 0 rgba(58,31,43,.55);transition:background .2s}
+  button:hover{background:rgba(96,48,64,.82)}
+  button:active{transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(58,31,43,.55)}
+  button:focus-visible{outline:2px dashed var(--cream);outline-offset:3px}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .tabs button{font-size:8px;padding:8px 10px;border-width:2px;box-shadow:3px 3px 0 rgba(58,31,43,.55)}
+  .tabs button.active{background:var(--accent);color:var(--ink)}
+  .dial{position:relative;width:min(62vw,270px,38vh);aspect-ratio:1}
+  .dial::before{content:"";position:absolute;inset:8%;border-radius:50%;
+    background:radial-gradient(circle,rgba(58,31,43,.5) 0 58%,rgba(58,31,43,0) 72%)}
+  #ring{position:absolute;inset:0;width:100%;height:100%;shape-rendering:crispEdges}
+  .tick{fill:rgba(255,244,230,.3);transition:fill .4s}
+  .tick.on{fill:var(--accent)}
+  #ring .lit{filter:drop-shadow(0 0 3px var(--glow))}
+  .center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+  .time{font-size:clamp(26px,8vw,44px);letter-spacing:1px;text-shadow:3px 3px 0 var(--ink),0 0 16px var(--glow)}
+  .adj{display:flex;align-items:center;gap:10px;font-size:7px;text-shadow:2px 2px 0 var(--ink)}
+  .adj button{padding:4px 7px;font-size:9px;border-width:2px;box-shadow:2px 2px 0 rgba(58,31,43,.55)}
+  .adj button:disabled{opacity:.35;cursor:default}
+  .controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  .controls .primary{min-width:120px;background:var(--accent);color:var(--ink);font-size:11px;padding:13px 16px}
+  .controls .primary:hover{filter:brightness(1.08)}
+  .sessions{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:7px;padding:6px 10px;background:rgba(58,31,43,.45);text-shadow:2px 2px 0 var(--ink)}
+  .dots{display:flex;gap:8px}
+  .dots i{width:12px;height:12px;border:2px solid var(--cream);background:rgba(58,31,43,.5);box-shadow:2px 2px 0 rgba(58,31,43,.55)}
+  .dots i.on{background:var(--accent)}
+  /* กล่องติ๊ก auto run + คำอธิบายตอน hover */
+  .auto{position:relative;display:flex;align-items:center;gap:8px;font-size:8px;cursor:pointer;padding:4px 10px 4px 4px;background:rgba(58,31,43,.45);
+    text-shadow:2px 2px 0 var(--ink);user-select:none}
+  .auto input{position:absolute;opacity:0;width:1px;height:1px}
+  .auto .box{width:16px;height:16px;border:2px solid var(--cream);background:rgba(58,31,43,.6);
+    box-shadow:2px 2px 0 rgba(58,31,43,.55);display:grid;place-items:center}
+  .auto .box svg{width:10px;height:10px;display:none;fill:var(--ink);shape-rendering:crispEdges}
+  .auto input:checked + .box{background:var(--accent)}
+  .auto input:checked + .box svg{display:block}
+  .auto input:focus-visible + .box{outline:2px dashed var(--cream);outline-offset:3px}
+  .auto:hover .box{background:rgba(96,48,64,.85)}
+  .auto:hover input:checked + .box{background:var(--accent)}
+  .tip{position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);z-index:5;
+    width:max-content;max-width:min(270px,82vw);padding:9px 11px;background:rgba(40,20,30,.94);
+    border:2px solid var(--cream);box-shadow:3px 3px 0 rgba(58,31,43,.55);
+    font-size:7px;line-height:1.8;text-align:left;text-shadow:none;
+    opacity:0;visibility:hidden;transition:opacity .15s;pointer-events:none}
+  .tip::after{content:"";position:absolute;top:100%;left:50%;margin-left:-5px;border:5px solid transparent;border-top-color:var(--cream)}
+  .auto:hover .tip,.auto:focus-within .tip{opacity:1;visibility:visible}
+  /* แผงเสียงมุมขวาบน */
+  .sound{position:fixed;top:12px;right:12px;z-index:3;display:flex;align-items:center;gap:8px;
+    padding:6px 10px 6px 6px;background:rgba(58,31,43,.66);border:2px solid var(--cream);box-shadow:3px 3px 0 rgba(58,31,43,.55)}
+  .sound button{padding:4px;border:0;background:transparent;box-shadow:none;line-height:0}
+  .sound button:hover{background:rgba(255,244,230,.15)}
+  .sound svg{width:22px;height:22px;shape-rendering:crispEdges}
+  .sound .waves{fill:var(--accent)}
+  .sound .x{fill:var(--accent);display:none}
+  .sound.muted .waves{display:none}
+  .sound.muted .x{display:inline}
+  #vol{-webkit-appearance:none;appearance:none;width:84px;height:8px;background:rgba(255,244,230,.25);cursor:pointer;
+    background-image:linear-gradient(var(--accent),var(--accent));background-repeat:no-repeat;background-size:60% 100%}
+  #vol::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:16px;background:var(--cream);border:2px solid var(--ink)}
+  #vol::-moz-range-thumb{width:10px;height:16px;background:var(--cream);border:2px solid var(--ink);border-radius:0}
+  #vol:focus-visible{outline:2px dashed var(--cream);outline-offset:4px}
+  .sound.muted #vol{opacity:.45}
+  #install{position:fixed;top:12px;left:12px;z-index:3;font-size:8px;padding:8px 10px;border-width:2px}
+  #install[hidden]{display:none}
+  @supports(padding:env(safe-area-inset-top)){.sound{top:calc(12px + env(safe-area-inset-top))}#install{top:calc(12px + env(safe-area-inset-top))}}
+  .keys{position:fixed;bottom:8px;left:0;right:0;z-index:2;text-align:center;font-size:7px;color:rgba(255,244,230,.7);text-shadow:1px 1px 0 var(--ink)}
+  @media (max-height:560px),(hover:none){.keys{display:none}}
+</style>
+</head>
+<body>
+<canvas id="scene" aria-hidden="true"></canvas>
+<div class="fx"></div>
+
+<main class="ui">
+  <header>
+    <h1>pomodoro</h1>
+    <p class="hint blink" id="hint">press start to begin</p>
+  </header>
+  <nav class="tabs" aria-label="Mode">
+    <button data-mode="focus" class="active">focus</button>
+    <button data-mode="short">short break</button>
+    <button data-mode="long">long break</button>
+  </nav>
+  <div class="dial">
+    <svg id="ring" viewBox="0 0 120 120" aria-hidden="true"></svg>
+    <div class="center">
+      <div class="time" id="time" role="timer" aria-live="off">25:00</div>
+      <div class="adj">
+        <button id="minus" aria-label="One minute less">-</button>
+        <span>minutes</span>
+        <button id="plus" aria-label="One minute more">+</button>
+      </div>
+    </div>
+  </div>
+  <div class="controls">
+    <button id="start" class="primary">start</button>
+    <button id="reset">reset</button>
+    <button id="skip">skip</button>
+  </div>
+  <label class="auto">
+    <input type="checkbox" id="auto" aria-describedby="autoTip">
+    <span class="box" aria-hidden="true"><svg viewBox="0 0 7 7"><rect x="0" y="3" width="1" height="1"/><rect x="1" y="4" width="1" height="1"/><rect x="2" y="5" width="1" height="1"/><rect x="3" y="4" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="1" y="3" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/></svg></span>
+    auto run
+    <span class="tip" id="autoTip" role="tooltip">When time is up, the next timer starts by itself: focus, break, focus... until all 4 session boxes are filled. After the long break it switches off and waits for you to press start.</span>
+  </label>
+  <div class="sessions">
+    <div class="dots" id="dots"><i></i><i></i><i></i><i></i></div>
+    <span id="sessLabel">session 1 of 4</span>
+  </div>
+</main>
+<button id="install" hidden>install app</button>
+<div class="keys">space = start/pause &nbsp; r = reset &nbsp; m = mute</div>
+<div class="sound" id="sound">
+  <button id="mute" aria-label="Mute sound" title="Sound on/off (M)">
+    <svg viewBox="0 0 11 11" aria-hidden="true">
+      <rect x="1" y="4" width="2" height="3" fill="#fff4e6"/><rect x="3" y="3" width="1" height="5" fill="#fff4e6"/>
+      <rect x="4" y="2" width="1" height="7" fill="#fff4e6"/><rect x="5" y="1" width="1" height="9" fill="#fff4e6"/>
+      <g class="waves"><rect x="7" y="4" width="1" height="3"/><rect x="8" y="2" width="1" height="1"/><rect x="9" y="3" width="1" height="5"/><rect x="8" y="8" width="1" height="1"/></g>
+      <g class="x"><rect x="7" y="3" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/><rect x="9" y="5" width="1" height="1"/><rect x="8" y="6" width="1" height="1"/><rect x="7" y="7" width="1" height="1"/><rect x="9" y="3" width="1" height="1"/><rect x="9" y="7" width="1" height="1"/></g>
+    </svg>
+  </button>
+  <input type="range" id="vol" min="0" max="100" value="60" aria-label="Volume">
+</div>
+
+<script>
+/* ======================================================================
+   PART 1 — ฉากถนนญี่ปุ่นยามเย็น (วาดด้วยโค้ดทั้งหมด ไม่มีไฟล์รูป)
+   อ่านตามลำดับ STEP 1 → STEP 9 ได้เลย
+   ====================================================================== */
+
+/* ---------- STEP 1: แคนวาสพิกเซล ----------
+   วาดบนแคนวาสเล็กๆ (กว้าง ~100-300 px) แล้วขยายด้วย CSS
+   "image-rendering: pixelated" → พิกเซล 1 จุดกลายเป็นสี่เหลี่ยมใหญ่ = ลุคพิกเซลอาร์ต */
+const cvs = document.getElementById('scene');
+const ctx = cvs.getContext('2d');
+const world = document.createElement('canvas');   // ชั้น "โลก" (บ้าน คน กลีบดอกไม้) แยกไว้เพื่อย้อมสีตอนเย็น
+const wctx = world.getContext('2d');
+let W, H, P, groundY, pathBottom, laneYs;
+let skyCache = null, skyT = -1, midCache = null, fgCache = null;
+let lanterns = [], windows = [], toros = [], trees = [], branchSpots = [], clouds = [], stars = [], motes = [];
+let petals = [], landed = [], people = [];
+let time = 0, theme = 0, themeTarget = 0;   // theme 0 = บ่ายแดดทอง (focus), 1 = ค่ำโคมไฟ (break)
+
+function resize(){
+  const vw = innerWidth, vh = innerHeight;
+  P = Math.max(3, Math.round(vh / (vw < vh ? 210 : 165)));   // ขนาด 1 พิกเซลบนจอจริง
+  W = Math.ceil(vw / P); H = Math.ceil(vh / P);
+  cvs.width = world.width = W; cvs.height = world.height = H;
+  cvs.style.width = W*P + 'px'; cvs.style.height = H*P + 'px';
+  ctx.imageSmoothingEnabled = wctx.imageSmoothingEnabled = false;
+  build();
+}
+
+/* ---------- STEP 2: เครื่องมือช่วย ----------
+   - rng(): สุ่มแบบมี seed → ฉากออกมาเหมือนเดิมทุกครั้งที่เปิด
+   - mix(): ผสมสี 2 สี ใช้ไล่สีจากกลางวันไปกลางคืน
+   - disc(): วาดวงกลมแบบพิกเซล */
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+let R = rng(1);
+const ri = (a,b) => Math.floor(a + R()*(b-a+1));            // สุ่มจำนวนเต็ม (มี seed)
+const rf = (a,b) => a + R()*(b-a);                          // สุ่มทศนิยม (มี seed)
+const pick = a => a[Math.floor(R()*a.length)];
+const rnd = (a,b) => a + Math.random()*(b-a);               // สุ่มจริง ใช้กับของที่ขยับ
+const rpick = a => a[Math.floor(Math.random()*a.length)];
+const hx = h => [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+const mix = (a,b,t) => { const A=hx(a),B=hx(b); return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join(''); };
+function disc(g,cx,cy,r){ for(let y=-r;y<=r;y++){ const w=Math.floor(Math.sqrt(r*r-y*y)); g.fillRect(Math.round(cx)-w,Math.round(cy)+y,w*2+1,1); } }
+function line(g,x0,y0,x1,y1){ x0=Math.round(x0);y0=Math.round(y0);x1=Math.round(x1);y1=Math.round(y1);
+  const dx=Math.abs(x1-x0), dy=-Math.abs(y1-y0), sx=x0<x1?1:-1, sy=y0<y1?1:-1; let e=dx+dy;
+  for(;;){ g.fillRect(x0,y0,1,1); if(x0===x1&&y0===y1)break; const e2=2*e; if(e2>=dy){e+=dy;x0+=sx;} if(e2<=dx){e+=dx;y0+=sy;} } }
+
+function build(){
+  R = rng(2024);
+  groundY = Math.floor(H*0.80);                               // ขอบหลังของทางเดิน
+  pathBottom = groundY + Math.max(14, Math.round(H*0.12));    // ขอบหน้าของทางเดิน
+  laneYs = [groundY + 6, groundY + Math.min(12, pathBottom - groundY - 3)];   // เลนหลัง / เลนหน้า
+  skyCache = null; skyT = -1;
+  lanterns = []; windows = []; toros = []; trees = []; branchSpots = [];
+  stars = []; for(let i=0;i<W*H/140;i++) stars.push({x:ri(0,W-1), y:ri(0,Math.floor(H*.4)), p:R()*6.3, s:rf(.6,2)});
+  clouds = []; for(let i=0;i<4;i++) clouds.push(makeCloud(R()*W, rf(.08,.3)*H));
+  buildMid();
+  buildLightMask();
+  buildFg();
+  petals = []; const n = Math.round(W*H/300); for(let i=0;i<n;i++) petals.push(newPetal(true));
+  landed = []; people = [];
+  motes = []; for(let i=0;i<22;i++) motes.push(newMote(true));
+  for(let i=0;i<3;i++) spawnGroup(rnd(W*.1, W*.9));          // มีคนเดินอยู่แล้วตั้งแต่เปิด
+}
+
+/* ---------- STEP 3: ท้องฟ้า พระอาทิตย์ ภูเขา เจดีย์ ----------
+   ของพวกนี้ไม่ขยับ เลยวาดครั้งเดียวเก็บไว้ (cache) แล้วค่อยวาดใหม่ตอนสีเปลี่ยน
+   ท้องฟ้าใช้สีเป็นแถบๆ + dithering (ลายตารางหมากรุก) ตรงรอยต่อ = เทคนิคพิกเซลอาร์ตคลาสสิก */
+const SKY_DAY = ['#7a6aa8','#9a74ad','#bd82ab','#dc93a6','#f0a69e','#f9bc96','#fdd19a','#ffe3ad'];
+const SKY_EVE = ['#2f2c63','#433874','#5d4382','#7c4f8b','#9d5c8e','#bd6e8e','#d9858e','#eea291'];
+
+function renderSky(){
+  if(!skyCache){ skyCache=document.createElement('canvas'); skyCache.width=W; skyCache.height=H; }
+  const g = skyCache.getContext('2d');
+  const cols = SKY_DAY.map((c,i)=>mix(c,SKY_EVE[i],theme));
+  const n = cols.length, bh = groundY/n;
+  for(let i=0;i<n;i++){ g.fillStyle=cols[i]; g.fillRect(0,Math.floor(i*bh),W,Math.ceil(bh)+1); }
+  g.fillRect(0,groundY,W,H-groundY);
+  for(let i=1;i<n;i++){
+    const y = Math.floor(i*bh);
+    g.fillStyle = cols[i-1]; for(let x=0;x<W;x+=2) g.fillRect(x,y,1,1);
+    g.fillStyle = cols[i];   for(let x=1;x<W;x+=2) g.fillRect(x,y-1,1,1);
+  }
+  // พระอาทิตย์: วงกลมซ้อนกันหลายชั้น ชั้นนอกโปร่งใส = แสงฟุ้ง
+  const sx=Math.floor(W*.7), sy=Math.floor(H*(.36+.1*theme)), sr=Math.max(6,Math.round(H*.07));
+  g.fillStyle = mix('#fff4cf','#ffb489',theme);
+  g.globalAlpha=.10; disc(g,sx,sy,sr+9); g.globalAlpha=.16; disc(g,sx,sy,sr+5);
+  g.globalAlpha=.30; disc(g,sx,sy,sr+2); g.globalAlpha=1; disc(g,sx,sy,sr);
+  // ภูเขา 2 ชั้น: ความสูงมาจากคลื่น sin หลายลูกบวกกัน
+  ridge(g, mix('#d7a8c0','#7a5f97',theme), H*.47, 7, 11);
+  const near = ridge(g, mix('#b886aa','#5b4880',theme), H*.57, 5, 23);
+  pagoda(g, Math.floor(W*.12), near[Math.floor(W*.12)] + 2, mix('#9a6e96','#4a3a6c',theme));
+  // หมอกบางๆ ใกล้พื้น
+  g.fillStyle = mix('#ffe7c4','#c58fb0',theme);
+  for(let i=0;i<16;i++){ g.globalAlpha=.03*(16-i)/2; g.fillRect(0,groundY-i,W,1); }
+  g.globalAlpha=1; skyT=theme;
+}
+function ridge(g,color,base,amp,seed){
+  const a=seed*.37, b=seed*1.91, c=seed*2.7, hs=[];
+  g.fillStyle=color;
+  for(let x=0;x<W;x++){
+    const h = Math.round(base + amp*(Math.sin(x*.03+a) + .5*Math.sin(x*.071+b) + .25*Math.sin(x*.17+c)));
+    hs.push(h); g.fillRect(x,h,1,groundY-h);
+  }
+  return hs;
+}
+function pagoda(g,cx,base,color){
+  g.fillStyle=color; let y=base;
+  for(let i=0;i<5;i++){
+    const w=13-2*i;
+    g.fillRect(cx-Math.floor((w-4)/2),y-3,w-4,3);           // ตัวชั้น
+    g.fillRect(cx-Math.floor(w/2),y-4,w,1);                 // ชายคา
+    g.fillRect(cx-Math.floor(w/2)-1,y-5,1,1); g.fillRect(cx+Math.ceil(w/2),y-5,1,1);   // ปลายชายคางอน
+    y-=5;
+  }
+  g.fillRect(cx,y-5,1,5);                                   // ยอดแหลม
+}
+function makeCloud(x,y){
+  const blobs=[]; let dx=0; const n=ri(4,7);
+  for(let i=0;i<n;i++){ blobs.push({dx, dy:ri(-2,1), r:ri(3,6)}); dx+=ri(3,6); }
+  return {x, y, blobs, v:rf(.8,2), w:dx};
+}
+
+/* ---------- STEP 4: บ้านไม้ ซากุระ โทริอิ ตะเกียงหิน ทางเดิน ----------
+   ทั้งหมดคือ fillRect (สี่เหลี่ยม) ล้วนๆ วาดครั้งเดียวเก็บใน midCache
+   ของที่ต้องเรืองแสง (หน้าต่าง โคมไฟ) จะจดตำแหน่งไว้ แล้วไปเติมแสงทีหลังใน STEP 8 */
+function buildMid(){
+  midCache = document.createElement('canvas'); midCache.width=W; midCache.height=H;
+  const g = midCache.getContext('2d');
+  const tx = W >= 140 ? Math.floor(W*.2) : -999;           // ตำแหน่งโทริอิ (จอแคบไม่ใส่)
+
+  // บ้านเรียงต่อกันไปทางขวา เว้นช่องให้โทริอิ
+  let x = -ri(4,14);
+  while(x < W+10){
+    const w = ri(26,44);
+    if(tx>0 && x < tx+17 && x+w > tx-17){ x = tx+17+ri(2,5); continue; }
+    house(g, x, w, R()<.55 ? 2 : 1);
+    x += w + ri(1,3);
+    if(R()<.25) x += ri(6,12);                              // ซอยเล็กๆ ระหว่างบ้าน
+  }
+  // ตะเกียงหิน (โทโร) ริมทาง
+  for(let x2=ri(8,24); x2<W; x2+=ri(42,64)) if(Math.abs(x2-tx)>18) toro(g, x2, groundY+1);
+  if(tx>0) torii(g, tx, groundY);
+  // ต้นซากุระ
+  for(let x2=ri(-4,18); x2<W+12; x2+=ri(48,80)){ const cx = Math.abs(x2-tx)<22 ? tx+24 : x2; tree(g, cx, groundY); }
+  // เชือกโคมไฟแขวนข้ามถนน
+  lanternRope(g, tx);
+  // ทางเดินหิน
+  g.fillStyle='#b8a28c'; g.fillRect(0,groundY,W,pathBottom-groundY);
+  for(let y=groundY+1,row=0; y<pathBottom-1; y+=4,row++){
+    g.fillStyle='#ccb89f'; g.fillRect(0,y,W,1);
+    g.fillStyle='#9d8875';
+    for(let x3=-(row%2)*5; x3<W; x3+=ri(7,12)) g.fillRect(x3,y,1,Math.min(4,pathBottom-1-y));
+  }
+  g.fillStyle='#8a7562'; g.fillRect(0,groundY,W,1);
+  g.fillStyle='#9a8571'; g.fillRect(0,pathBottom-1,W,1);
+  // กลีบที่ร่วงอยู่บนทางเดินใต้ต้นซากุระ
+  for(const t of trees) for(let i=0;i<14;i++){ g.fillStyle=pick(['#f4b3c6','#ffd0dc','#eea0b8']); g.fillRect(t.cx+ri(-16,16), ri(groundY+1,pathBottom-2), 1, 1); }
+  // หญ้าด้านหน้า + ดอกไม้เล็กๆ
+  g.fillStyle='#7d9a57'; g.fillRect(0,pathBottom,W,H-pathBottom);
+  g.fillStyle='#93b066'; g.fillRect(0,pathBottom,W,1);
+  for(let i=0;i<W*1.2;i++){ g.fillStyle=pick(['#5f7f45','#6c8c4c','#93b066']); g.fillRect(ri(0,W-1), ri(pathBottom+1,H-1), 1, ri(1,2)); }
+  for(let i=0;i<W/6;i++){ g.fillStyle=pick(['#fff3e0','#ffd166','#ffb3c6']); g.fillRect(ri(0,W-1), ri(pathBottom+2,H-1), 1, 1); }
+}
+
+function house(g,x,w,floors){
+  const base=groundY, h1=ri(11,13), h2=floors===2?ri(8,10):0, top=base-h1-h2;
+  const wood=pick(['#7a4b33','#6e4430','#82533a']), woodD=mix(wood,'#000000',.25);
+  const plaster=pick(['#ead6b3','#e3cfa8','#efdcbd']), beam='#4a2f22';
+  // ชั้นล่าง: ผนังไม้ + ระแนงไม้ (โคชิ)
+  g.fillStyle=wood; g.fillRect(x,base-h1,w,h1);
+  g.fillStyle=woodD; for(let lx=x+1; lx<x+w-1; lx+=2) g.fillRect(lx,base-h1+2,1,h1-3);
+  // ประตู + ผ้าม่านโนเรน
+  const dw=ri(7,9), dx=x+ri(3,Math.max(3,w-dw-3));
+  g.fillStyle='#2b1a12'; g.fillRect(dx,base-h1+2,dw,h1-2);
+  windows.push({x:dx+1,y:base-5,w:dw-2,h:4,k:'door'});
+  const sw=Math.ceil(dw/3);
+  g.fillStyle=pick(['#2f3f73','#a8423a','#3e5c4a','#5a3a6b']);
+  for(let i=0;i<dw;i+=sw) g.fillRect(dx+i,base-h1+2,sw-1,5);
+  g.fillStyle='#f3ead8'; g.fillRect(dx+Math.floor(dw/2),base-h1+4,1,1);
+  // หน้าต่างโชจิ (กระดาษ) ชั้นล่าง
+  const right = dx > x+w/2;
+  const space = right ? dx-x-6 : x+w-(dx+dw)-6, ww=Math.min(10,space);
+  if(ww>=5){
+    const wx = right ? x+3 : dx+dw+3;
+    g.fillStyle=beam; g.fillRect(wx-1,base-h1+3,ww+2,6);
+    g.fillStyle='#f6e6c4'; g.fillRect(wx,base-h1+4,ww,4);
+    g.fillStyle='#b99a72'; for(let i=wx+2;i<wx+ww;i+=3) g.fillRect(i,base-h1+4,1,4); g.fillRect(wx,base-h1+6,ww,1);
+    windows.push({x:wx,y:base-h1+4,w:ww,h:4,k:'shoji'});
+  }
+  // ชั้นบน: ผนังปูนสีครีม + หน้าต่างซี่ไม้
+  if(floors===2){
+    g.fillStyle=plaster; g.fillRect(x+1,top,w-2,h2);
+    g.fillStyle=beam; g.fillRect(x+1,top,1,h2); g.fillRect(x+w-2,top,1,h2); g.fillRect(x+1,top+h2-1,w-2,1);
+    const mw=ri(6,Math.min(12,w-8)), mx=x+Math.floor((w-mw)/2);
+    g.fillStyle='#3a2418'; g.fillRect(mx,top+2,mw,4);
+    windows.push({x:mx,y:top+2,w:mw,h:4,k:'slat'});
+    g.fillStyle='#4a4563'; g.fillRect(x-2,base-h1-2,w+4,1);  // ชายคาเล็กคั่นชั้น
+    g.fillStyle='#3c3853'; g.fillRect(x-2,base-h1-1,w+4,1);
+  }
+  roof(g,x-3,top,w+6,ri(4,6));
+  // โคมกระดาษหน้าร้าน
+  if(R()<.75) lanterns.push({x: dx-4 >= x ? dx-4 : dx+dw, y: base-h1+2, c: pick(['#e2463b','#e2463b','#f3e6c8']), big:true, ph:R()*6});
+}
+function roof(g,x,yb,w,rh){
+  for(let r=0;r<rh;r++){ g.fillStyle = r===rh-1 ? '#2c283f' : (r%2 ? '#3c3853' : '#4a4563'); g.fillRect(x+r, yb-1-r, w-2*r, 1); }
+  g.fillStyle='#2c283f'; g.fillRect(x+rh-1, yb-rh-1, 1, 1); g.fillRect(x+w-rh, yb-rh-1, 1, 1);   // ปลายสันหลังคา
+  g.fillStyle='#4a4563'; g.fillRect(x, yb-2, 1, 1); g.fillRect(x+w-1, yb-2, 1, 1);               // มุมชายคางอน
+  g.fillStyle='rgba(0,0,0,.25)'; g.fillRect(x+3, yb, w-6, 1);                                   // เงาใต้ชายคา
+}
+function toro(g,cx,base){
+  const s='#8f8779', d='#6f6759', l='#aaa293';
+  g.fillStyle=d; g.fillRect(cx-3,base-1,7,1);
+  g.fillStyle=s; g.fillRect(cx-2,base-2,5,1); g.fillRect(cx-1,base-6,3,4); g.fillRect(cx-3,base-7,7,1); g.fillRect(cx-2,base-10,5,3);
+  g.fillStyle=l; g.fillRect(cx-1,base-6,1,4);
+  g.fillStyle='#5a3a20'; g.fillRect(cx-1,base-9,3,1);
+  g.fillStyle=d; g.fillRect(cx-4,base-11,9,1);
+  g.fillStyle=s; g.fillRect(cx-3,base-12,7,1); g.fillRect(cx-1,base-13,3,1); g.fillRect(cx,base-14,1,1);
+  toros.push({x:cx-1,y:base-9,w:3,h:1});
+}
+function torii(g,cx,base){
+  const th=Math.max(24,Math.min(40,Math.round(H*.2)));
+  const red='#d6452e', redD='#a8331f', blk='#2b1f1f';
+  for(const px of [cx-9,cx+8]){
+    g.fillStyle=red; g.fillRect(px,base-th,2,th); g.fillStyle=redD; g.fillRect(px+1,base-th,1,th);
+    g.fillStyle=blk; g.fillRect(px-1,base-2,4,2);
+  }
+  g.fillStyle=red; g.fillRect(cx-12,base-th+6,25,2); g.fillStyle=redD; g.fillRect(cx-12,base-th+7,25,1);   // คานล่าง (นุกิ)
+  g.fillStyle=red; g.fillRect(cx-13,base-th,27,1);                                                         // คานแดง
+  g.fillStyle=blk; g.fillRect(cx-14,base-th-1,29,1); g.fillRect(cx-15,base-th-2,31,1);                     // คานดำบนสุด
+  g.fillRect(cx-15,base-th-3,1,1); g.fillRect(cx+15,base-th-3,1,1);                                       // ปลายงอนขึ้น
+  g.fillRect(cx-1,base-th+1,3,5); g.fillStyle='#e8c25a'; g.fillRect(cx,base-th+2,1,3);                    // ป้ายกลาง
+  lanterns.push({x:cx-6,y:base-th+9,c:'#f3e6c8',big:false,ph:1}, {x:cx+4,y:base-th+9,c:'#f3e6c8',big:false,ph:2});
+}
+function tree(g,cx,base){
+  const th=ri(20,30), seed=R()*6;
+  // ลำต้นคดเล็กน้อยด้วย sin
+  for(let y=0;y<th;y++){
+    const xo=Math.round(Math.sin(y*.18+seed)*1.5), w=y<th*.4?3:2;
+    g.fillStyle='#5a3a2e'; g.fillRect(cx+xo-1,base-1-y,w,1);
+    g.fillStyle='#432a22'; g.fillRect(cx+xo-1+w-1,base-1-y,1,1);
+  }
+  g.fillStyle='#5a3a2e'; g.fillRect(cx-2,base-1,5,1);
+  const ccx=cx+Math.round(Math.sin(th*.18+seed)*1.5), cy=base-th, rx=ri(12,17), ry=ri(8,11);
+  g.fillStyle='#4a2e26';
+  for(let i=0;i<4;i++) line(g, ccx, cy+ri(2,6), ccx+ri(-rx+3,rx-3), cy+ri(-ry+3,2));
+  // พุ่มดอก: วงกลมเล็กหลายวง 3 เฉดสี (เงา → สีหลัก → ไฮไลต์)
+  const blobs=[]; const n=ri(14,20);
+  for(let i=0;i<n;i++){ const a=R()*6.28, d=Math.sqrt(R()); blobs.push({x:ccx+Math.cos(a)*rx*d, y:cy+Math.sin(a)*ry*d*.9, r:ri(3,6)}); }
+  g.fillStyle='#d97f9e'; for(const b of blobs) disc(g,b.x+1,b.y+1,b.r);
+  g.fillStyle='#f4a6bf'; for(const b of blobs) disc(g,b.x,b.y,b.r);
+  g.fillStyle='#ffc9d8'; for(const b of blobs) if(b.y<cy) disc(g,b.x-1,b.y-1,Math.max(1,b.r-2));
+  g.fillStyle='#fff1f5'; for(let i=0;i<22;i++) g.fillRect(Math.round(ccx+rf(-rx,rx)*.9), Math.round(cy+rf(-ry,ry)*.8), 1, 1);
+  trees.push({cx:ccx, cy, rx, ry});
+}
+function lanternRope(g,tx){
+  const ropeY = groundY-27, cols=['#e2463b','#f3e6c8','#e2463b','#f0a04b'];
+  let a = ri(-10,10), k=0;
+  while(a < W){
+    const b = a + ri(46,68), sag = ri(4,7);
+    for(let x=a; x<=b; x++){
+      if(tx>0 && Math.abs(x-tx)<17) continue;
+      const t=(x-a)/(b-a), y=Math.round(ropeY + sag*(1-(2*t-1)**2));
+      g.fillStyle='#3a2a28'; g.fillRect(x,y,1,1);
+      if(x-a>3 && b-x>3 && (x-a)%7===0) lanterns.push({x:x-1, y:y+1, c:cols[k++%cols.length], big:false, ph:R()*6});
+    }
+    a = b;
+  }
+}
+
+/* ---------- STEP 5: กิ่งซากุระมุมจอ (ชั้นหน้าสุด) ---------- */
+function buildFg(){
+  fgCache = document.createElement('canvas'); fgCache.width=W; fgCache.height=H;
+  const g = fgCache.getContext('2d');
+  for(const side of [0,1]){
+    const s = side ? -1 : 1, len = Math.min(W*.34, 95);
+    let x = side ? W+2 : -2, y = Math.round(H*rf(.02,.07));
+    const pts = [[x,y]];
+    for(let i=0;i<6;i++){ x += s*len/6; y += rf(-1,3.5); pts.push([x,y]); }
+    g.fillStyle='#4a2e26';
+    for(let i=1;i<pts.length;i++){ line(g,pts[i-1][0],pts[i-1][1],pts[i][0],pts[i][1]); if(i<4) line(g,pts[i-1][0],pts[i-1][1]+1,pts[i][0],pts[i][1]+1); }
+    const tips = pts.slice(1);
+    for(let i=1;i<pts.length;i+=2){ const ex=pts[i][0]+s*ri(3,8), ey=pts[i][1]+ri(3,9); g.fillStyle='#4a2e26'; line(g,pts[i][0],pts[i][1],ex,ey); tips.push([ex,ey]); }
+    for(const [bx,by] of tips){ for(let k=0;k<ri(3,6);k++) flower(g, bx+ri(-4,4), by+ri(-3,4)); branchSpots.push([bx,by]); }
+  }
+}
+function flower(g,x,y){
+  x=Math.round(x); y=Math.round(y);
+  g.fillStyle=pick(['#ffc2d3','#ffb0c5','#ffd6e0']);
+  g.fillRect(x-1,y,1,1); g.fillRect(x+1,y,1,1); g.fillRect(x,y-1,1,1); g.fillRect(x,y+1,1,1);
+  g.fillStyle='#e0708f'; g.fillRect(x,y,1,1);
+  g.fillStyle='#fff0f4'; g.fillRect(x,y-1,1,1);
+}
+
+/* ---------- STEP 6: คนใส่กิโมโน ----------
+   คนแต่ละคน = สี่เหลี่ยมเล็กๆ ประมาณ 20 ชิ้น (หัว ผม ตัวกิโมโน โอบิ แขนเสื้อ เท้า)
+   - เดิน: แบ่งท่าเท้าเป็น 4 เฟรม เปลี่ยนเฟรมตามระยะทางที่เดิน (เดินช้า = ก้าวช้า)
+   - ตัวโยก: เฟรม 1 กับ 3 ยกตัวขึ้น 1 พิกเซล
+   - หันซ้าย/ขวา: ฟังก์ชัน R_() กลับด้านพิกัด x ให้อัตโนมัติ วาดท่าเดียวได้ทั้งสองทิศ */
+const SKIN=['#f5d2b3','#eebf9a','#f8dcc4','#dfab84'];
+const HAIR=['#1f1a24','#2c2128','#3b2b26','#4b352b'];
+const K_WOMAN=['#e9789a','#f2a65a','#7fb2d9','#b391d1','#f0cf6a','#e2614f','#8ccaa5','#f4b9c8'];
+const OBI_W=['#f8ecc9','#e0ad47','#8a2f43','#34477e','#ffffff','#5e9c7a'];
+const K_MAN=['#33467a','#5c4b43','#4e6a5b','#676d82','#3f3b52','#7a5a46'];
+const HAKAMA=['#4a4458','#3a3a4a','#5a4a3a','#2f3550'];
+const OBI_M=['#cdb68c','#2a2a2a','#8a6d4b','#a8a8a8'];
+const K_KID=['#ff8fab','#ffc75f','#6fd3e8','#a0e070','#ff7a6b','#c49bff'];
+const UMB=['#c8423b','#f1e1c0','#3b4c86','#9a4f86','#e08b3c'];
+const FEET_ADULT=[[2,-2],[1,-1],[-2,2],[-1,1]], FEET_KID=[[1,-1],[0,0],[-1,1],[0,0]];
+
+function makePerson(type){
+  const kid = type==='boy'||type==='girl', old = type.startsWith('old');
+  const fem = type==='woman'||type==='girl'||type==='oldwoman';
+  const p = {type, kid, old, fem, skin:rpick(SKIN), dist:Math.random()*20,
+    hair: old ? rpick(['#d9d4cf','#bdb7b2','#e8e4e0']) : rpick(HAIR),
+    flower: rpick(['#ff8fab','#ffd166','#ffffff','#e2614f'])};
+  if(kid){ p.k=rpick(K_KID); p.obi = fem ? rpick(['#ff5e7e','#ffe066','#ffffff','#7ad7f0']) : rpick(['#ffffff','#f2d36b','#2f3f73']); }
+  else if(fem){ p.k = old ? rpick(['#8a7aa0','#7d8f84','#a08a78','#6f7fa0']) : rpick(K_WOMAN); p.obi=rpick(OBI_W); }
+  else { p.k=rpick(K_MAN); p.obi=rpick(OBI_M); p.hakama = !old && Math.random()<.5 ? rpick(HAKAMA) : null; }
+  p.kd = mix(p.k,'#000000',.22); p.kl = mix(p.k,'#ffffff',.35);
+  p.dots = (fem||kid) ? [0,1,2].map(()=>[Math.floor(rnd(-1,2)), Math.floor(rnd(kid?-6:-8, -2))]) : [];
+  p.prop = null;
+  if(old) p.prop={t:'cane'};
+  else if(!kid && fem && Math.random()<.3) p.prop={t:'umbrella',c:rpick(UMB)};
+  else if(!kid && !fem && Math.random()<.22) p.prop={t:'fan',c:rpick(['#f1e1c0','#c8423b','#7fb2d9'])};
+  else if(kid && Math.random()<.4) p.prop = Math.random()<.5 ? {t:'goldfish'} : {t:'fan',c:rpick(['#ffd166','#ff8fab','#8ecae6'])};
+  return p;
+}
+
+function spawnGroup(startAt){
+  const dir = Math.random()<.5 ? 1 : -1, r = Math.random();
+  let types, speed;
+  if(r<.30){ types=[rpick(['man','woman','woman'])]; speed=rnd(6.5,8.5); }                                       // เดินคนเดียว
+  else if(r<.50){ types=['man','woman']; speed=rnd(6,7.5); }                                                     // คู่รัก
+  else if(r<.75){ types=[rpick(['man','woman']), rpick(['boy','girl'])]; if(Math.random()<.3) types.push(rpick(['boy','girl'])); speed=rnd(5.5,7); }   // พ่อแม่ลูก
+  else if(r<.88){ types=[rpick(['boy','girl']), rpick(['boy','girl'])]; speed=rnd(9,12); }                       // เด็กวิ่งเล่น
+  else { types=[rpick(['oldman','oldwoman'])]; if(Math.random()<.4) types.push(types[0]==='oldman'?'oldwoman':'oldman'); speed=rnd(3.5,4.5); }   // คุณตาคุณยาย
+  const lane0 = Math.random()<.5 ? 0 : 1, x0 = startAt ?? (dir>0 ? -10 : W+10);
+  types.forEach((t,i)=>{
+    const p = makePerson(t);
+    p.dir = dir; p.speed = speed;
+    p.lane = types.length>1 ? (lane0+i)%2 : lane0;        // คนในกลุ่มเดินคู่กันคนละเลน
+    p.x = x0 - dir*(i*4 + (i>1?6:0));
+    people.push(p);
+  });
+}
+
+function drawPerson(g,p){
+  const fx = Math.round(p.x), fy = laneYs[p.lane], d = p.dir;
+  const R_ = (lx,ly,w,h,c) => { g.fillStyle=c; g.fillRect(d>0 ? fx+lx : fx-lx-w+1, fy+ly, w, h); };
+  const f = Math.floor(p.dist / (p.kid?1.6:(p.old?1.8:2.3))) % 4;
+  const bob = (f===1||f===3) ? -1 : 0;
+  const swing = p.prop && p.prop.t==='umbrella' ? 0 : (f===0 ? 1 : f===2 ? -1 : 0);
+  const [a,b] = (p.kid ? FEET_KID : FEET_ADULT)[f];
+  g.fillStyle='rgba(70,35,45,.22)'; g.fillRect(fx-3,fy,7,1);                     // เงาใต้เท้า
+  R_(b-1,-1,2,1,'#2e2018'); R_(a-1,-1,2,1,'#3d2a20');                          // เกี๊ยะ (เท้าหลัง/หน้า)
+  const eye='#2a1e1e', blush='#f2a0a0';
+
+  if(p.kid){
+    const top=-7+bob, hy=top-4;
+    if(p.fem){ R_(-2,top,4,-1-top,p.k); }
+    else { R_(-2,top,4,-2-top,p.k); R_(a,-2,1,1,p.skin); R_(b,-2,1,1,p.skin); }  // เด็กชายกิโมโนสั้น เห็นขา
+    R_(-2,top,1,-1-top+(p.fem?0:-1),p.kd);
+    for(const [px,py] of p.dots) if(py>top) R_(px,py,1,1,p.kl);
+    R_(-2,top+2,4,1,p.obi);
+    if(p.fem) R_(-4,top+1,2,3,p.obi);                                          // โบว์ใหญ่ด้านหลัง
+    R_(-1+swing,top+1,1,3,p.kd); R_(swing,top+4,1,1,p.skin);
+    R_(-2,hy,4,4,p.skin);
+    R_(-2,hy,4,1,p.hair); R_(-2,hy,1,p.fem?3:2,p.hair);
+    if(p.fem){ R_(-3,hy+1,1,2,p.hair); R_(-1,hy-1,1,1,p.flower); }
+    R_(0,hy+2,1,1,eye); R_(1,hy+3,1,1,blush);
+    if(p.prop && p.prop.t==='goldfish'){ R_(swing+1,top+5,2,2,'#bfe6ff'); R_(swing+1,top+6,1,1,'#ff7b3a'); }
+    if(p.prop && p.prop.t==='fan'){ const fl=Math.sin(time*9+p.x)>0?-1:0; R_(2,top+fl,2,2,p.prop.c); R_(2,top+2+fl,1,1,'#6b4a33'); }
+    return;
+  }
+
+  const lean = p.old ? 1 : 0, top = (p.old?-11:-12)+bob, hy = top-4;
+  if(!p.fem && p.hakama){
+    R_(-2,top,5,6,p.k);
+    R_(-2,top+6,5,-2-(top+6),p.hakama); R_(-3,-2,6,1,p.hakama);               // ฮากามะ ปลายบาน
+    R_(0,top+7,1,-2-(top+7),mix(p.hakama,'#000000',.3));
+  } else {
+    R_(-2,top,5,-2-top,p.k); R_(-2,-2,4,1,p.k);
+  }
+  R_(-2,top,1,p.hakama?6:-1-top,p.kd);                                        // เงาด้านหลัง
+  for(const [px,py] of p.dots) if(py>top+4) R_(px,py,1,1,p.kl);               // ลายดอกบนกิโมโน
+  if(p.fem){
+    R_(-2,top+3,5,2,p.obi); R_(-2,top+4,5,1,mix(p.obi,'#000000',.15));
+    R_(-3,top+2,1,4,p.obi);                                                   // ปมโอบิด้านหลัง
+    R_(1,top,2,1,'#f6efe1'); R_(1,top+1,1,1,'#f6efe1');                       // คอเสื้อ
+  } else {
+    R_(-2,top+5,5,1,p.obi); R_(1,top,1,2,'#efe6d6');
+  }
+  R_(-1+swing,top+1,2,p.fem?6:5,p.kd);                                        // แขนเสื้อ
+  R_(swing+1,top+(p.fem?6:5),1,1,p.skin);                                     // มือ
+  R_(-1+lean,hy,4,4,p.skin);                                                  // หน้า
+  if(p.fem){
+    R_(-2+lean,hy,4,1,p.hair); R_(-2+lean,hy,1,3,p.hair);
+    R_(-3+lean,hy-1,2,2,p.hair);                                              // มวยผม
+    if(!p.old) R_(-1+lean,hy-1,1,1,p.flower);                                 // ปิ่นดอกไม้
+  } else {
+    R_(-2+lean,hy,p.old?2:5,1,p.hair); R_(-2+lean,hy,1,3,p.hair);
+  }
+  R_(1+lean,hy+2,1,1,eye); if(p.fem) R_(2+lean,hy+3,1,1,blush);
+  if(p.prop){
+    if(p.prop.t==='cane'){ R_(3,top+5,1,-1-(top+5),'#6b4a33'); R_(2,top+5,1,1,p.skin); }
+    if(p.prop.t==='fan'){ const fl=Math.sin(time*7+p.x)>0?-1:0; R_(3,top+1+fl,2,2,p.prop.c); R_(3,top+3+fl,1,2,'#6b4a33'); }
+    if(p.prop.t==='umbrella'){                                                // ร่มกระดาษ (วากาสะ)
+      const c=p.prop.c, cy=hy-3;
+      R_(2,cy+1,1,top+5-(cy+1),'#5a3a28'); R_(2,top+5,1,1,p.skin);
+      R_(-4,cy,11,1,mix(c,'#000000',.25)); R_(-3,cy-1,9,1,c); R_(-1,cy-2,5,1,c);
+      for(let i=-2;i<=4;i+=2) R_(i,cy-1,1,1,mix(c,'#ffffff',.35));
+      R_(1,cy-3,1,1,'#3a2a28');
+    }
+  }
+}
+
+/* ---------- STEP 7: กลีบซากุระ (particle system) ----------
+   กลีบแต่ละกลีบมี: ความเร็วตก, การส่ายซ้ายขวา (sin), ลมพัด, และ "พลิก" (เปลี่ยนรูปทรง 2x1 / 1x1 / 1x2)
+   ตกถึงพื้นแล้วค้างอยู่สักพักค่อยจางหาย แล้วกลีบนั้นก็กลับไปเริ่มตกใหม่ (รีไซเคิล ไม่สร้างใหม่ตลอด) */
+const PETAL_COLS=['#ffd3de','#ffbccd','#ffa9bf','#fff0f4','#f7b2c4'];
+function newPetal(init){
+  const front = Math.random()<.12, r = Math.random();
+  let x, y;
+  if(!init && r<.3 && trees.length){ const t=rpick(trees); x=t.cx+rnd(-t.rx,t.rx); y=t.cy+rnd(-t.ry*.5,t.ry*.5); }
+  else if(!init && r<.45 && branchSpots.length){ const b=rpick(branchSpots); x=b[0]; y=b[1]; }
+  else { x=rnd(-W*.1,W*1.1); y = init ? Math.random()*H : -3-Math.random()*20; }
+  return {bx:x, x, y, front, vy: front ? rnd(13,20) : rnd(5,11), amp:rnd(2,7), f:rnd(.6,1.6), ph:Math.random()*6.3,
+          c:rpick(PETAL_COLS), land: groundY+1+Math.random()*(H-groundY-2)};
+}
+function newMote(init){
+  return {bx:Math.random()*W, x:0, y: init ? rnd(H*.2,H) : H+2, vy:rnd(1.5,4), amp:rnd(2,6), f:rnd(.3,.8), ph:rnd(0,6.3), tw:rnd(1,3)};
+}
+
+/* ---------- STEP 8: แสงไฟ ----------
+   ใช้ globalCompositeOperation = 'lighter' → สีบวกทับกันแล้วสว่างขึ้น เหมือนแสงจริง
+   ระดับแสง (glow) ขึ้นกับ theme: บ่ายแดดทอง = เรืองอ่อนๆ, ค่ำ = สว่างเต็มที่ */
+function drawLanternBody(g,l){
+  const w=l.big?4:3, h=l.big?6:5;
+  g.fillStyle='#2a1a18'; g.fillRect(l.x+Math.floor(w/2),l.y-1,1,1); g.fillRect(l.x,l.y,w,1); g.fillRect(l.x,l.y+h-1,w,1);
+  g.fillStyle=l.c; g.fillRect(l.x,l.y+1,w,h-2);
+  g.fillStyle=mix(l.c,'#ffffff',.35); g.fillRect(l.x,l.y+1,1,h-2);
+  if(l.big){ g.fillStyle = l.c==='#f3e6c8' ? '#5a3a2a' : '#7a1d16'; g.fillRect(l.x+2,l.y+2,1,2); }
+}
+// แสงฟุ้งทรงกลมแบบขั้นบันได: วาดวงกลมโปร่งใสซ้อนกันหลายวง เก็บเป็นรูปเล็กๆ ไว้ใช้ซ้ำ
+const glowCache = {};
+function glowSprite(r,color){
+  const key=r+color; if(glowCache[key]) return glowCache[key];
+  const c=document.createElement('canvas'); c.width=c.height=r*2+1;
+  const g=c.getContext('2d'); g.fillStyle=color; g.globalAlpha=.16;
+  for(let k=r;k>=1;k-=2) disc(g,r,r,k);
+  return glowCache[key]=c;
+}
+// หน้าต่างที่ถูกต้นไม้บังไม่ควรเรืองทะลุ → ตรวจสีพิกเซลทีละจุด แล้วระบายแสงลง "lightMask" เฉพาะจุดที่มองเห็น
+let lightMask = null;
+function buildLightMask(){
+  lightMask=document.createElement('canvas'); lightMask.width=W; lightMask.height=H;
+  const m=lightMask.getContext('2d'), px=midCache.getContext('2d').getImageData(0,0,W,H).data;
+  const BASE=['#3a2418','#f6e6c4','#b99a72','#2b1a12','#5a3a20'].map(hx);
+  const visible=(x,y)=>{ if(x<0||y<0||x>=W||y>=H) return false; const i=(y*W+x)*4; return BASE.some(c=>c[0]===px[i]&&c[1]===px[i+1]&&c[2]===px[i+2]); };
+  const all=[...windows, ...toros.map(t=>({...t,k:'toro'}))];
+  for(const w of all){
+    let seen=0;
+    for(let y=w.y;y<w.y+w.h;y++) for(let x=w.x;x<w.x+w.w;x++){
+      if(w.k==='slat' && (x-w.x)%2===0) continue;
+      if(!visible(x,y)) continue;
+      seen++; m.fillStyle = w.k==='door' ? '#ffb060' : '#ffcf7a';
+      m.globalAlpha = w.k==='shoji' ? .55 : 1; m.fillRect(x,y,1,1);
+    }
+    w.visible = seen >= (w.w*w.h)*.4;
+  }
+  m.globalAlpha=1;
+}
+function drawLights(glow){
+  ctx.globalCompositeOperation='lighter';
+  for(const l of lanterns){
+    const fl = glow*(.85+.15*Math.sin(time*2.3+l.ph)), w=l.big?4:3, h=l.big?6:5;
+    ctx.fillStyle='#ff9c4a'; ctx.globalAlpha=.45*fl; ctx.fillRect(l.x,l.y+1,w,h-2);
+    const s=glowSprite(l.big?9:7,'#ffb35c'), r=(s.width-1)/2;
+    ctx.globalAlpha=fl; ctx.drawImage(s, l.x+Math.floor(w/2)-r, l.y+Math.floor(h/2)-r);
+  }
+  ctx.globalAlpha=.25+.75*glow; ctx.drawImage(lightMask,0,0);
+  for(const w of windows){
+    if(!w.visible) continue;
+    const s=glowSprite(Math.ceil(Math.max(w.w,w.h)/2)+3,'#ffcf7a'), r=(s.width-1)/2;
+    ctx.globalAlpha=.55*glow; ctx.drawImage(s, w.x+Math.floor(w.w/2)-r, w.y+Math.floor(w.h/2)-r);
+    if(w.k==='door'){ ctx.fillStyle='#ffcf7a'; ctx.globalAlpha=.12*glow; ctx.fillRect(w.x-1,groundY+1,w.w+2,3); }
+  }
+  for(const t of toros){
+    const s=glowSprite(6,'#ffd27a');
+    ctx.globalAlpha=.8*glow; ctx.drawImage(s, t.x+1-6, t.y-6);
+  }
+  ctx.fillStyle='#ffe7a8';
+  for(const m of motes){ ctx.globalAlpha=(.25+.4*theme)*(.5+.5*Math.sin(time*m.tw+m.ph)); ctx.fillRect(Math.round(m.x),Math.round(m.y),1,1); }
+  ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over';
+}
+
+/* ---------- STEP 9: ลูปแอนิเมชัน ----------
+   ทุกเฟรม: อัปเดตตำแหน่งของที่ขยับ (dt = เวลาที่ผ่านไป) → วาดทุกชั้นจากหลังไปหน้า
+   ลำดับชั้น: ฟ้า → เมฆ → [บ้าน/ทาง → โคม → กลีบบนพื้น → คน → กลีบที่ตก → กิ่งมุมจอ] → แสงไฟ */
+let last = performance.now(), spawnTimer = 2;
+function frame(now){
+  const dt = Math.min(.05,(now-last)/1000); last = now; time += dt;
+
+  theme += (themeTarget-theme)*Math.min(1,dt*1.2);
+  if(Math.abs(themeTarget-theme)<.002) theme = themeTarget;
+  if(Math.abs(theme-skyT)>.015 || (theme===themeTarget && skyT!==theme)) renderSky();
+  const glow = .25 + .75*theme;
+
+  // --- อัปเดต ---
+  for(const c of clouds){ c.x += c.v*dt; if(c.x > W+10) c.x = -c.w-10; }
+  spawnTimer -= dt;
+  if(spawnTimer<0){ if(people.length<10) spawnGroup(); spawnTimer = rnd(3,7); }
+  for(const p of people){ p.x += p.dir*p.speed*dt; p.dist += p.speed*dt; }
+  people = people.filter(p => p.dir>0 ? p.x < W+16 : p.x > -16);
+  const wind = 1.5*Math.sin(time*.05) - 1;
+  for(const p of petals){
+    p.bx += wind*dt*(p.front?1.6:1);
+    p.x = p.bx + p.amp*Math.sin(time*p.f+p.ph);
+    p.y += p.vy*dt*(.75+.35*Math.sin(time*p.f*1.7+p.ph));
+    if(p.x < -12) p.bx += W+24; else if(p.x > W+12) p.bx -= W+24;
+    if(!p.front && p.y >= p.land){
+      landed.push({x:Math.round(p.x), y:Math.round(p.y), c:p.c, w:Math.random()<.5?2:1, life:rnd(8,16), age:0});
+      if(landed.length>220) landed.shift();
+      Object.assign(p, newPetal(false));
+    } else if(p.front && p.y > H+3) Object.assign(p, newPetal(false));
+  }
+  for(const l of landed) l.age += dt;
+  landed = landed.filter(l => l.age < l.life);
+  for(const m of motes){ m.y -= m.vy*dt; m.x = m.bx + m.amp*Math.sin(time*m.f+m.ph); if(m.y < H*.15) Object.assign(m, newMote(false)); }
+
+  // --- วาดฉากหลัง ---
+  ctx.drawImage(skyCache,0,0);
+  if(theme>.05){ ctx.fillStyle='#fff6e8'; for(const s of stars){ ctx.globalAlpha=theme*(.3+.3*Math.sin(time*s.s+s.p)); ctx.fillRect(s.x,s.y,1,1); } ctx.globalAlpha=1; }
+  const cMain=mix('#fff1e6','#b89ac8',theme), cShade=mix('#f5c9cf','#8f78ad',theme);
+  for(const c of clouds){
+    ctx.fillStyle=cShade; for(const b of c.blobs) disc(ctx,c.x+b.dx,c.y+b.dy+1,b.r);
+    ctx.fillStyle=cMain;  for(const b of c.blobs) disc(ctx,c.x+b.dx,c.y+b.dy,b.r-1);
+  }
+
+  // --- วาดชั้น "โลก" ---
+  wctx.clearRect(0,0,W,H);
+  wctx.drawImage(midCache,0,0);
+  for(const l of lanterns) drawLanternBody(wctx,l);
+  for(const l of landed){ wctx.globalAlpha = Math.min(1,(l.life-l.age)/2); wctx.fillStyle=l.c; wctx.fillRect(l.x,l.y,l.w,1); }
+  wctx.globalAlpha=1;
+  people.sort((a,b)=>a.lane-b.lane);
+  for(const p of people) drawPerson(wctx,p);
+  const drawPetal = p => {
+    const flip=Math.sin(time*p.f*2.3+p.ph), x=Math.round(p.x), y=Math.round(p.y);
+    wctx.fillStyle=p.c;
+    if(p.front) wctx.fillRect(x,y,flip>.3?2:(flip<-.3?1:2),flip>.3?2:(flip<-.3?2:1));
+    else wctx.fillRect(x,y,flip>.45?2:1,flip<-.45?2:1);
+  };
+  for(const p of petals) if(!p.front) drawPetal(p);
+  wctx.drawImage(fgCache,0,0);
+  for(const p of petals) if(p.front) drawPetal(p);
+  // ตอนค่ำ: ย้อมสีม่วงเฉพาะส่วนที่มีภาพ ('source-atop')
+  if(theme>.01){
+    wctx.globalCompositeOperation='source-atop'; wctx.globalAlpha=.38*theme;
+    wctx.fillStyle='#3b2d6e'; wctx.fillRect(0,0,W,H);
+    wctx.globalAlpha=1; wctx.globalCompositeOperation='source-over';
+  }
+  ctx.drawImage(world,0,0);
+
+  drawLights(glow);
+  requestAnimationFrame(frame);
+}
+
+addEventListener('resize', ()=>{ clearTimeout(resize.t); resize.t=setTimeout(resize,150); });
+resize();
+requestAnimationFrame(frame);
+
+/* ======================================================================
+   PART 2 — ตัวจับเวลา (HTML + CSS + JavaScript พื้นฐาน)
+   ====================================================================== */
+const $ = id => document.getElementById(id);
+const ring=$('ring'), timeEl=$('time'), hint=$('hint'), startBtn=$('start');
+const LABEL = {focus:'focus', short:'short break', long:'long break'};
+let mins = {focus:25, short:5, long:15};
+try{ const s=JSON.parse(localStorage.getItem('sakura-pomo-mins')); if(s) mins={...mins,...s}; }catch(e){}
+let mode='focus', total=mins.focus*60, remaining=total, running=false, endAt=0, done=0;
+
+const TICKS=60, ticks=[], NS='http://www.w3.org/2000/svg';
+const litGroup=document.createElementNS(NS,'g'); litGroup.setAttribute('class','lit');
+const dimGroup=document.createElementNS(NS,'g');
+ring.append(dimGroup, litGroup);
+for(let i=0;i<TICKS;i++){
+  const r=document.createElementNS(NS,'rect');
+  r.setAttribute('x',58); r.setAttribute('y',4); r.setAttribute('width',4); r.setAttribute('height',9);
+  r.setAttribute('transform',`rotate(${i*360/TICKS} 60 60)`); r.setAttribute('class','tick');
+  dimGroup.append(r); ticks.push(r);
+}
+const fmt = s => { s=Math.ceil(s); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); };
+
+function render(){
+  const t=fmt(remaining); timeEl.textContent=t;
+  const lit=Math.ceil((remaining/total)*TICKS-1e-9);
+  ticks.forEach((r,i)=>{ const on=i<lit; if(on!==r.classList.contains('on')){ r.classList.toggle('on',on); (on?litGroup:dimGroup).append(r);} });
+  startBtn.textContent = running ? 'pause' : (remaining<total ? 'resume' : 'start');
+  $('minus').disabled = $('plus').disabled = running;
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+  const filled = (mode==='long' && done>0 && done%4===0) ? 4 : done%4;
+  document.querySelectorAll('#dots i').forEach((d,i)=>d.classList.toggle('on',i<filled));
+  $('sessLabel').textContent = `session ${Math.min(4,(done%4)+1)} of 4`;
+  if(running){ hint.textContent = (autoBox.checked ? 'auto · ' : '') + (mode==='focus' ? 'one petal at a time' : 'enjoy the evening'); hint.classList.remove('blink'); }
+  else if(remaining<total){ hint.textContent='paused'; hint.classList.add('blink'); }
+  document.title = running ? `${t} · ${LABEL[mode]}` : 'Sakura Pomodoro';
+  if(typeof keepAwake==='function') keepAwake(running);
+}
+function setMode(m){
+  mode=m; running=false; total=mins[m]*60; remaining=total;
+  themeTarget = m==='focus' ? 0 : 1;
+  document.body.classList.toggle('break', m!=='focus');
+  hint.textContent='press start to begin'; hint.classList.add('blink');
+  render();
+}
+function start(){ ensureAudio(); if(remaining<=0) return; running=true; endAt=performance.now()+remaining*1000; render(); }
+function pause(){ remaining=Math.max(0,(endAt-performance.now())/1000); running=false; render(); }
+// มือถือ: ขอให้จอไม่ดับระหว่างจับเวลา (Screen Wake Lock API) ปล่อยเมื่อหยุดหรือออกจากแอป
+let wakeLock=null, wakePending=false;
+async function keepAwake(on){
+  try{
+    if(on && !wakeLock && !wakePending && 'wakeLock' in navigator && document.visibilityState==='visible'){
+      wakePending=true; wakeLock=await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release',()=>{ wakeLock=null; });
+    } else if(!on && wakeLock){ const w=wakeLock; wakeLock=null; await w.release(); }
+  }catch(e){} finally{ wakePending=false; }
+}
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible' && running) keepAwake(true); });
+
+// auto run: หมดเวลาแล้วเริ่มรอบถัดไปเอง จนจบ long break แล้วเอาติ๊กออก รอผู้ใช้กด start
+const autoBox = $('auto');
+autoBox.onchange = () => render();
+function advance(sound){
+  const finished = mode;
+  if(sound) chime();
+  if(mode==='focus'){ done++; setMode(done%4===0?'long':'short'); } else setMode('focus');
+  if(autoBox.checked){
+    if(finished==='long'){ autoBox.checked=false; hint.textContent='cycle complete! press start'; return; }
+    start(); return;
+  }
+  if(sound) hint.textContent = mode==='focus' ? 'break is over. press start' : 'well done! press start for a break';
+}
+setInterval(()=>{
+  if(!running) return;
+  remaining=Math.max(0,(endAt-performance.now())/1000);
+  if(remaining<=0){ running=false; advance(true); return; }
+  render();
+},200);
+
+const ensureAudio = () => Sound.unlock();
+const chime = () => Sound.chime();
+function adjust(dlt){
+  if(running) return;
+  mins[mode]=Math.min(90,Math.max(1,mins[mode]+dlt));
+  try{ localStorage.setItem('sakura-pomo-mins',JSON.stringify(mins)); }catch(e){}
+  total=remaining=mins[mode]*60; render();
+}
+startBtn.onclick=()=>running?pause():start();
+$('reset').onclick=()=>setMode(mode);
+$('skip').onclick=()=>advance(false);
+$('minus').onclick=()=>adjust(-1);
+$('plus').onclick=()=>adjust(1);
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+addEventListener('keydown',e=>{
+  if(e.target.tagName==='BUTTON' && (e.code==='Space'||e.code==='Enter')) return;
+  if(e.code==='Space'){ e.preventDefault(); running?pause():start(); }
+  if(e.key==='r'||e.key==='R') setMode(mode);
+  if(e.key==='m'||e.key==='M') Sound.toggleMute();
+});
+setMode('focus');
+
+/* ======================================================================
+   PART 3 — เสียงบรรยากาศ (สร้างด้วย Web Audio API ทั้งหมด ไม่มีไฟล์เสียง)
+   โครงสร้าง: แหล่งเสียงแต่ละชนิด → ช่องเสียง (bus) ของมันเอง → master (ปุ่มปรับเสียง) → ลำโพง
+   บางช่องส่งไปห้องเสียงก้อง (reverb) ด้วย ให้ฟังนุ่มเหมือนอยู่กลางแจ้ง
+   ====================================================================== */
+const Sound = (() => {
+  let ac=null, master, reverb, bus={}, whiteBuf, brownBuf, koto={};
+  const GAIN = 3;                                            // ความดังรวม
+  let vol=.6, muted=false;
+  try{ const s=JSON.parse(localStorage.getItem('sakura-sound')); if(s){ vol=s.vol ?? vol; muted=!!s.muted; } }catch(e){}
+  const save = () => { try{ localStorage.setItem('sakura-sound', JSON.stringify({vol,muted})); }catch(e){} };
+  const R2 = (a,b) => a + Math.random()*(b-a);
+
+  // เสียงซ่า (noise) = ตัวเลขสุ่ม → เอาไปกรองความถี่ได้เสียงลม
+  function noise(sec, brown){
+    const n=Math.floor(ac.sampleRate*sec), b=ac.createBuffer(1,n,ac.sampleRate), d=b.getChannelData(0); let last=0;
+    for(let i=0;i<n;i++){ const w=Math.random()*2-1; if(brown){ last=(last+.02*w)/1.02; d[i]=last*3.5; } else d[i]=w; }
+    return b;
+  }
+  // เสียงก้อง: noise ที่ค่อยๆ เบาลง ใช้กับ ConvolverNode
+  function impulse(sec){
+    const n=Math.floor(ac.sampleRate*sec), b=ac.createBuffer(2,n,ac.sampleRate);
+    for(let c=0;c<2;c++){ const d=b.getChannelData(c); for(let i=0;i<n;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/n,3); }
+    return b;
+  }
+  // เสียงดีดสาย (Karplus-Strong): เติม noise ลงวงจรสั้นๆ แล้วเฉลี่ยค่าวนซ้ำ → ได้เสียงสายสั่นที่ค่อยๆ จาง
+  function pluck(freq, sec, decay, soft){
+    const sr=ac.sampleRate, n=Math.floor(sr*sec), b=ac.createBuffer(1,n,sr), d=b.getChannelData(0);
+    const per=Math.max(2,Math.round(sr/freq)), line=new Float32Array(per);
+    for(let i=0;i<per;i++) line[i]=Math.random()*2-1;
+    for(let k=0;k<soft;k++) for(let i=0;i<per;i++) line[i]=(line[i]+line[(i+1)%per])*.5;   // ทำให้หัวเสียงนุ่มลง
+    let idx=0;
+    for(let i=0;i<n;i++){
+      const nx=(idx+1)%per, v=line[idx];
+      line[idx]=decay*.5*(v+line[nx]); idx=nx;
+      d[i]=v*(i>n*.85 ? (n-i)/(n*.15) : 1);
+    }
+    return b;
+  }
+  function out(target, pan){
+    if(!ac.createStereoPanner) return target;
+    const p=ac.createStereoPanner(); p.pan.value=pan; p.connect(target); return p;
+  }
+
+  function init(){
+    ac = new (window.AudioContext||window.webkitAudioContext)();
+    const limiter = ac.createDynamicsCompressor();          // กันเสียงแตกตอนเปิดดังสุด
+    limiter.threshold.value=-6; limiter.ratio.value=8; limiter.connect(ac.destination);
+    master = ac.createGain(); master.gain.value = muted ? 0 : vol*vol*GAIN; master.connect(limiter);
+    reverb = ac.createConvolver(); reverb.buffer = impulse(2.8);
+    const rv = ac.createGain(); rv.gain.value=.35; reverb.connect(rv).connect(master);
+    const mk = (g, wet) => { const n=ac.createGain(); n.gain.value=g; n.connect(master); if(wet){ const s=ac.createGain(); s.gain.value=wet; n.connect(s).connect(reverb); } return n; };
+    bus.wind=mk(.45,.15); bus.birds=mk(.35,.45); bus.crickets=mk(.25,.3); bus.fx=mk(.9,.6);
+    bus.music=mk(.6,.9);
+    bus.musicIn=ac.createBiquadFilter(); bus.musicIn.type='lowpass'; bus.musicIn.frequency.value=2800; bus.musicIn.connect(bus.music);   // กรองเสียงแหลมออกให้อุ่นแบบ lo-fi
+    whiteBuf=noise(3,false); brownBuf=noise(4,true);
+    for(const n in F) koto[n] = pluck(F[n], F[n]<200 ? 4.2 : 3.4, .9975, 2);   // เตรียมเสียงโคโตะทุกโน้ตไว้ก่อน
+    startWind(); birds(); cricket(4400,-.5,.55,.8); cricket(5150,.6,.8,1.15); startMusic();
+  }
+
+  /* ลม + ใบไม้ไหว (ปรับให้นุ่มหู):
+     - ใช้ noise ทุ้ม (brown) ผ่านฟิลเตอร์ low-pass 2 ชั้น ตัดเสียงซ่าแหลมๆ ออก
+     - แยกลม 2 สาย ซ้าย/ขวา แต่ละสายแรงขึ้นลงไม่พร้อมกัน → ฟังกว้างและเป็นธรรมชาติ
+     - ลมเปลี่ยนแรงช้าๆ ทุก 6-14 วินาที ไม่กระโชกทันที
+     - ใบไม้ไหวเป็นเสียง "ชู่ว" เบาๆ ช่วงกลาง ไม่ใช่เสียงซ่าแหลม */
+  function windLayer(pan){
+    const s=ac.createBufferSource(); s.buffer=brownBuf; s.loop=true;
+    const lp1=ac.createBiquadFilter(); lp1.type='lowpass'; lp1.frequency.value=380; lp1.Q.value=.4;
+    const lp2=ac.createBiquadFilter(); lp2.type='lowpass'; lp2.frequency.value=900; lp2.Q.value=.3;
+    const g=ac.createGain(); g.gain.value=.08;
+    s.connect(lp1).connect(lp2).connect(g).connect(out(bus.wind,pan));
+    s.start(0, Math.random()*3);                              // เริ่มคนละจุดของเสียง ซ้ายขวาจะไม่เหมือนกัน
+    (function swell(){
+      const t=ac.currentTime, x=Math.random(), dur=R2(6,14), k=1-.4*theme;
+      lp1.frequency.setTargetAtTime(220+x*380, t, dur/2);
+      g.gain.setTargetAtTime((.05+x*.16)*k, t, dur/2);
+      setTimeout(swell, dur*1000);
+    })();
+  }
+  function startWind(){
+    windLayer(-.6); windLayer(.6);
+    const s=ac.createBufferSource(); s.buffer=whiteBuf; s.loop=true;
+    const bp=ac.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1600; bp.Q.value=.5;
+    const lp=ac.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=2600;
+    const g=ac.createGain(); g.gain.value=0;
+    s.connect(bp).connect(lp).connect(g).connect(bus.wind);
+    s.start();
+    (function rustle(){
+      const t=ac.currentTime, x=Math.random(), dur=R2(5,12), k=1-.4*theme;
+      g.gain.setTargetAtTime(x>.6 ? (x-.6)*.05*k : 0, t, dur/2.5);   // ใบไม้ไหวเฉพาะตอนลมแรงหน่อย และเบามาก
+      setTimeout(rustle, dur*1000);
+    })();
+  }
+
+  /* นก (ตอนกลางวัน): เสียง sine สั้นๆ ที่ความถี่กวาดขึ้นเร็ว = เสียงจิ๊บ */
+  function birds(){
+    const day=1-theme;
+    if(day>.05){
+      const t0=ac.currentTime+.05, n=2+Math.floor(Math.random()*4), base=R2(2200,4000), o2=out(bus.birds,R2(-.8,.8));
+      for(let i=0;i<n;i++){
+        const t=t0+i*R2(.09,.17), o=ac.createOscillator(), g=ac.createGain(), f0=base*R2(.9,1.1), f1=f0*R2(1.3,1.7);
+        o.frequency.setValueAtTime(f0,t); o.frequency.exponentialRampToValueAtTime(f1,t+.05); o.frequency.exponentialRampToValueAtTime(f0*.9,t+.085);
+        g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.12*day,t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+.09);
+        o.connect(g).connect(o2); o.start(t); o.stop(t+.1);
+      }
+    }
+    setTimeout(birds, R2(3000,10000));
+  }
+
+  /* จิ้งหรีด (ตอนค่ำ): เสียงแหลมเป็นจังหวะ 3-4 ครั้งติด วนเป็นระยะ บางทีก็หยุดพัก */
+  function cricket(freq, pan, a, b){
+    let resting=0;
+    (function loop(){
+      const ev=theme;
+      if(resting>0) resting--;
+      else if(Math.random()<.04) resting=Math.floor(R2(4,12));
+      else if(ev>.05){
+        const t0=ac.currentTime+.03, o=ac.createOscillator(), g=ac.createGain(), k=3+Math.floor(Math.random()*2);
+        o.frequency.value=freq*R2(.99,1.01); g.gain.value=0;
+        for(let i=0;i<k;i++){ const t=t0+i*.045; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.05*ev,t+.008); g.gain.linearRampToValueAtTime(0,t+.03); }
+        o.connect(g).connect(out(bus.crickets,pan)); o.start(t0); o.stop(t0+k*.045+.05);
+      }
+      setTimeout(loop, R2(a,b)*1000);
+    })();
+  }
+
+  /* ====== เพลงโคโตะ (แต่งไว้ ไม่ใช่สุ่มมั่ว) ======
+     - จังหวะคงที่ 64 BPM (ช้า สบายๆ) ทุกโน้ตลงตรงจังหวะ
+     - ใช้บันไดเสียง "โย" แบบญี่ปุ่น: D E G A B ไม่มีโน้ตห่างครึ่งเสียง → ไม่มีเสียงขัดหู
+     - คอร์ดวน 8 ห้อง: G → A → Bm → Em → G → A → D → D (จบที่ D ให้รู้สึกกลับบ้าน)
+     - เสียงคลอ: เบสทุ้มนุ่ม + ดีดไล่คอร์ด (arpeggio) เบาๆ
+     - ทำนองหลัก: แต่งไว้ 4 ท่อน สลับกันเล่น บางรอบเว้นทำนอง ให้หูได้พัก */
+  const F = {D2:73.42,E2:82.41,G2:98,A2:110,B2:123.47,D3:146.83,E3:164.81,G3:196,A3:220,B3:246.94,
+             D4:293.66,E4:329.63,G4:392,A4:440,B4:493.88,D5:587.33,E5:659.26};
+  const BPM=64, BEAT=60/BPM, BAR=BEAT*4;
+  // คอร์ดแต่ละห้อง: bass = เบส, k = โน้ตดีดตรงจังหวะแรก, n = โน้ตในคอร์ดสำหรับดีดไล่
+  const PROG = [
+    {bass:'G2', k:'G3', n:['D3','B3','D4','G3']},   // G(add9)
+    {bass:'A2', k:'A3', n:['E3','D4','E4','A3']},   // Asus4
+    {bass:'B2', k:'B3', n:['D3','A3','D4','B3']},   // Bm7
+    {bass:'E2', k:'E3', n:['B3','D4','G4','E3']},   // Em7
+    {bass:'G2', k:'G3', n:['D3','B3','D4','G3']},   // G(add9)
+    {bass:'A2', k:'A3', n:['E3','D4','E4','A3']},   // Asus4
+    {bass:'D2', k:'D3', n:['A3','E4','D4','A3']},   // Dsus2
+    {bass:'D2', k:'D3', n:['A3','E4','D4','A3']},   // Dsus2
+  ];
+  // ทำนอง: [จังหวะที่เริ่ม (0-3.5), ยาวกี่จังหวะ, โน้ต] ห้องละ 1 แถว
+  const MELODIES = [
+    [ [[0,1.5,'B4'],[1.5,.5,'A4'],[2,2,'D5']], [[0,1,'E5'],[1,1,'D5'],[2,2,'A4']],
+      [[0,1.5,'B4'],[1.5,.5,'D5'],[2,1,'E5'],[3,1,'D5']], [[0,3,'B4']],
+      [[0,1,'D5'],[1,1,'B4'],[2,1.5,'A4'],[3.5,.5,'G4']], [[0,2,'A4'],[2,1,'E4'],[3,1,'G4']],
+      [[0,1.5,'A4'],[1.5,.5,'E4'],[2,2,'D4']], [] ],
+    [ [[0,.5,'G4'],[.5,.5,'A4'],[1,1,'B4'],[2,1,'D5'],[3,1,'B4']], [[0,2,'A4'],[2,.5,'D5'],[2.5,.5,'E5'],[3,1,'D5']],
+      [[0,2,'B4'],[2,1,'A4'],[3,1,'D5']], [[0,2,'E5'],[2,2,'D5']],
+      [[0,1,'B4'],[1,.5,'A4'],[1.5,.5,'G4'],[2,2,'A4']], [[0,1,'E4'],[1,1,'G4'],[2,2,'A4']],
+      [[0,1,'B4'],[1,1,'A4'],[2,2,'E4']], [[0,4,'D4']] ],
+    [ [[0,3,'D4'],[3,1,'E4']], [[0,2,'A4'],[2,2,'E4']],
+      [[0,1,'D4'],[1,1,'E4'],[2,2,'B3']], [[0,4,'E4']],
+      [[0,1,'G4'],[1,1,'A4'],[2,2,'B4']], [[0,1.5,'A4'],[1.5,.5,'E4'],[2,2,'D4']],
+      [[0,2,'E4'],[2,2,'D4']], [] ],
+    [ [[0,1,'D5'],[1,1,'E5'],[2,1.5,'D5'],[3.5,.5,'B4']], [[0,2,'A4'],[2,.5,'B4'],[2.5,.5,'A4'],[3,1,'E4']],
+      [[0,1,'D5'],[1,1,'B4'],[2,2,'A4']], [[0,1,'G4'],[1,1,'B4'],[2,2,'E5']],
+      [[0,1.5,'D5'],[1.5,.5,'B4'],[2,2,'G4']], [[0,1,'A4'],[1,1,'D5'],[2,2,'E5']],
+      [[0,1,'D5'],[1,1,'B4'],[2,1,'A4'],[3,1,'E4']], [[0,4,'D4']] ],
+  ];
+  const ARP_FLOW  = [[.5,0],[1,1],[2,2],[2.5,1],[3.5,3]];   // ดีดไล่คอร์ดแบบไหลๆ
+  const ARP_SOFT  = [[2,1],[2,2]];                          // แบบโปร่ง (ตอนพักทำนอง)
+  const hum = () => R2(-.012,.012);                         // คลาดจังหวะนิดเดียว ให้เหมือนคนเล่นจริง
+
+  function kotoNote(name, t, vel, dur, pan, vib){
+    const src=ac.createBufferSource(), g=ac.createGain();
+    src.buffer=koto[name];
+    if(vib){                                                  // "ยุริ" สั่นเสียงเบาๆ บนโน้ตยาว แบบโคโตะ
+      const lfo=ac.createOscillator(), d=ac.createGain();
+      lfo.frequency.value=4.5; d.gain.setValueAtTime(0,t); d.gain.linearRampToValueAtTime(.004,t+.9);
+      lfo.connect(d).connect(src.playbackRate); lfo.start(t); lfo.stop(t+dur+1);
+    }
+    g.gain.setValueAtTime(vel,t);
+    g.gain.setTargetAtTime(vel*.3, t+dur+.08, .35);          // ค่อยๆ ซับเสียงเมื่อหมดโน้ต ไม่ให้ทับกันจนขุ่น
+    src.connect(g).connect(out(bus.musicIn,pan)); src.start(t);
+  }
+  function bassNote(name, t){
+    const o=ac.createOscillator(), g=ac.createGain();
+    o.type='sine'; o.frequency.value=F[name];
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.11,t+.06); g.gain.exponentialRampToValueAtTime(.0008,t+BAR*.95);
+    o.connect(g).connect(bus.musicIn); o.start(t); o.stop(t+BAR);
+  }
+
+  let section=-1, lastMel=-1, barInSection=0, nextBar=0, count=0;
+  function nextSection(){
+    count++;
+    if(count===1 || Math.random()<.22) return -1;             // -1 = ไม่มีทำนอง เล่นแค่เสียงคลอ (ช่วงพักหู)
+    let m; do{ m=Math.floor(Math.random()*MELODIES.length); } while(m===lastMel);
+    return lastMel=m;
+  }
+  function scheduleBar(t){
+    if(barInSection===0) section=nextSection();
+    const c=PROG[barInSection], quiet=section===-1;
+    bassNote(c.bass, t);
+    kotoNote(c.k, t+hum(), quiet?.3:.36, BEAT*2, -.15);
+    for(const [b,i] of (quiet?ARP_SOFT:ARP_FLOW)) kotoNote(c.n[i], t+b*BEAT+hum(), R2(.2,.26), BEAT, R2(-.3,.1));
+    if(!quiet){
+      const bar=MELODIES[section][barInSection];
+      bar.forEach(([b,d,n],i)=>{
+        const v=(i===0?.5:.44)*R2(.92,1.05);
+        kotoNote(n, t+b*BEAT+hum(), v, d*BEAT, R2(0,.3), d>=2 && Math.random()<.6);
+      });
+    }
+    barInSection=(barInSection+1)%PROG.length;
+  }
+  // ตัวจัดคิว: เช็กทุก 0.25 วินาที แล้วจองโน้ตล่วงหน้า 2.5 วินาที → จังหวะแม่นแม้เครื่องจะช้า
+  function startMusic(){
+    nextBar=ac.currentTime+1.5;
+    setInterval(()=>{ while(nextBar < ac.currentTime+2.5){ scheduleBar(nextBar); nextBar+=BAR; } }, 250);
+  }
+
+  /* กระดิ่งลม (ฟูริน) ตอนหมดเวลา */
+  function chime(){
+    if(!ac) return;
+    [1568,1976,2349,1976,2637].forEach((f,i)=>{
+      const t=ac.currentTime+i*.22;
+      [[1,.06],[2.76,.012]].forEach(([m,v])=>{
+        const o=ac.createOscillator(), g=ac.createGain();
+        o.frequency.value=f*m;
+        g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(v,t+.005); g.gain.exponentialRampToValueAtTime(.0001,t+1.6);
+        o.connect(g).connect(bus.fx); o.start(t); o.stop(t+1.7);
+      });
+    });
+  }
+
+  // แผงควบคุม
+  const box=$('sound'), slider=$('vol'), btn=$('mute');
+  function apply(){
+    box.classList.toggle('muted', muted);
+    btn.setAttribute('aria-label', muted ? 'Turn sound on' : 'Mute sound');
+    slider.value=Math.round(vol*100);
+    slider.style.backgroundSize = Math.round(vol*100)+'% 100%';
+    if(master) master.gain.setTargetAtTime(muted ? 0 : vol*vol*GAIN, ac.currentTime, .08);   // vol² ให้ปรับแล้วรู้สึกเป็นธรรมชาติ
+    save();
+  }
+  function unlock(){
+    try{ if(!ac) init(); if(ac.state==='suspended') ac.resume(); }catch(e){}
+  }
+  function toggleMute(){ unlock(); muted=!muted; if(!muted && vol<.05) vol=.5; apply(); }
+  btn.onclick = toggleMute;
+  slider.oninput = () => { unlock(); vol=slider.value/100; muted = vol===0; apply(); };
+  // เบราว์เซอร์ไม่ให้เล่นเสียงเองจนกว่าผู้ใช้จะแตะหน้าเว็บครั้งแรก
+  addEventListener('pointerdown', unlock, {once:true});
+  addEventListener('keydown', unlock, {once:true});
+  apply();
+  return {unlock, chime, toggleMute};
+})();
+
+/* ======================================================================
+   PART 4 — ติดตั้งเป็นแอป (PWA)
+   ====================================================================== */
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+let installEvt=null;
+const installBtn=document.getElementById('install');
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt=e; installBtn.hidden=false; });
+installBtn.onclick = async () => { if(!installEvt) return; installEvt.prompt(); await installEvt.userChoice.catch(()=>{}); installEvt=null; installBtn.hidden=true; };
+addEventListener('appinstalled', () => { installBtn.hidden=true; });
+</script>
+</body>
+</html>
