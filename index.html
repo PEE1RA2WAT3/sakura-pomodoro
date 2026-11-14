@@ -40,7 +40,7 @@
   .tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
   .tabs button{font-size:8px;padding:8px 10px;border-width:2px;box-shadow:3px 3px 0 rgba(58,31,43,.55)}
   .tabs button.active{background:var(--accent);color:var(--ink)}
-  .dial{position:relative;width:min(62vw,270px,38vh);aspect-ratio:1}
+  .dial{position:relative;width:min(62vw,270px,38vh);aspect-ratio:1;flex-shrink:0}
   .dial::before{content:"";position:absolute;inset:8%;border-radius:50%;
     background:radial-gradient(circle,rgba(58,31,43,.5) 0 58%,rgba(58,31,43,0) 72%)}
   #ring{position:absolute;inset:0;width:100%;height:100%;shape-rendering:crispEdges}
@@ -94,6 +94,13 @@
   #vol::-moz-range-thumb{width:10px;height:16px;background:var(--cream);border:2px solid var(--ink);border-radius:0}
   #vol:focus-visible{outline:2px dashed var(--cream);outline-offset:4px}
   .sound.muted #vol{opacity:.45}
+  html{touch-action:manipulation}
+  @media (max-width:700px){ .ui{padding-top:calc(58px + env(safe-area-inset-top))} }
+  @media (max-height:500px) and (orientation:landscape){
+    .ui{padding:6px 16px; gap:6px} .hint{display:none} h1{font-size:18px}
+    .dial{width:min(44vh,190px)} .time{font-size:24px} .center{gap:8px} .controls .primary{padding:10px 14px}
+    .sound{top:8px;right:calc(8px + env(safe-area-inset-right))}
+  }
   #install{position:fixed;top:12px;left:12px;z-index:3;font-size:8px;padding:8px 10px;border-width:2px}
   #install[hidden]{display:none}
   @supports(padding:env(safe-area-inset-top)){.sound{top:calc(12px + env(safe-area-inset-top))}#install{top:calc(12px + env(safe-area-inset-top))}}
@@ -177,6 +184,7 @@ let time = 0, theme = 0, themeTarget = 0;   // theme 0 = บ่ายแดด�
 
 function resize(){
   const vw = innerWidth, vh = innerHeight;
+  lastVW = vw; lastVH = vh;
   P = Math.max(3, Math.round(vh / (vw < vh ? 210 : 165)));   // ขนาด 1 พิกเซลบนจอจริง
   W = Math.ceil(vw / P); H = Math.ceil(vh / P);
   cvs.width = world.width = W; cvs.height = world.height = H;
@@ -659,6 +667,7 @@ function drawLights(glow){
 let last = performance.now(), spawnTimer = 2;
 function frame(now){
   const dt = Math.min(.05,(now-last)/1000); last = now; time += dt;
+  sizeCheck += dt; if(sizeCheck > .3){ sizeCheck = 0; checkSize(); }
 
   theme += (themeTarget-theme)*Math.min(1,dt*1.2);
   if(Math.abs(themeTarget-theme)<.002) theme = themeTarget;
@@ -725,7 +734,12 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 
-addEventListener('resize', ()=>{ clearTimeout(resize.t); resize.t=setTimeout(resize,150); });
+// ขนาดจอเปลี่ยน (หมุนมือถือ / ย่อหน้าต่าง): iPhone มักรายงานขนาดใหม่ช้ากว่าเหตุการณ์ resize
+// เลยเช็กขนาดจอซ้ำเรื่อยๆ ในลูปแอนิเมชันด้วย ถ้าไม่ตรงกับที่วาดไว้ก็วาดฉากใหม่
+let lastVW=0, lastVH=0, sizeCheck=0;
+function checkSize(){ if(innerWidth!==lastVW || innerHeight!==lastVH) resize(); }
+addEventListener('resize', ()=>{ clearTimeout(resize.t); resize.t=setTimeout(checkSize,120); });
+addEventListener('orientationchange', ()=>{ setTimeout(checkSize,300); setTimeout(checkSize,900); });
 resize();
 requestAnimationFrame(frame);
 
