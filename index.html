@@ -186,10 +186,19 @@ let time = 0, theme = 0, themeTarget = 0;   // theme 0 = บ่ายแดด�
 
 // ขนาดจอจริง: วัดจากกรอบที่คลุมทั้งจอ และบน iPhone (เปิดจากไอคอนหน้าจอโฮม) ใช้ขนาดหน้าจอเต็มๆ
 // เพื่อให้ฉากเต็มถึงขอบล่าง ไม่เหลือแถบสีเข้ม
+/* iPhone/iPad: Safari บางเวอร์ชัน (รวมแอปที่ติดตั้งลงหน้าจอโฮม) รายงานความสูงจอสั้นกว่าจริง ทำให้ขอบล่างลอย
+   ถ้าเป็นอุปกรณ์ iOS และหน้าแอปกว้างเต็มจอ ให้ใช้ขนาดจอจริงไปเลย */
+function fullScreenIOS(w,h){
+  if(navigator.standalone) return true;
+  const ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  if(!ios) return false;
+  const a=Math.min(screen.width,screen.height), b=Math.max(screen.width,screen.height);
+  return Math.abs((w>h?b:a)-w)<=2;
+}
 function viewSize(){
   const r = document.querySelector('.fx').getBoundingClientRect();
   let w = Math.max(r.width, innerWidth), h = Math.max(r.height, innerHeight);
-  if(navigator.standalone){
+  if(fullScreenIOS(w,h)){
     const a = Math.min(screen.width, screen.height), b = Math.max(screen.width, screen.height);
     if(w > h){ w = Math.max(w, b); h = Math.max(h, a); } else { w = Math.max(w, a); h = Math.max(h, b); }
   }
