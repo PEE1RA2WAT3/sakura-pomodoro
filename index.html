@@ -80,6 +80,14 @@
     opacity:0;visibility:hidden;transition:opacity .15s;pointer-events:none}
   .tip::after{content:"";position:absolute;top:100%;left:50%;margin-left:-5px;border:5px solid transparent;border-top-color:var(--cream)}
   .auto:hover .tip,.auto:focus-within .tip{opacity:1;visibility:visible}
+
+  /* กล่องคำพูดของซามูไร (ลอยตามตัวที่เดิน) */
+  .samtip{position:fixed;left:0;top:0;z-index:20;transform:translate(-50%,-100%);pointer-events:none;
+    width:max-content;max-width:min(250px,80vw);padding:9px 11px;background:var(--ink);color:var(--cream);
+    border:2px solid var(--cream);box-shadow:3px 3px 0 rgba(58,31,43,.55);font-size:8px;line-height:1.7;letter-spacing:.5px;
+    text-align:center;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
+  .samtip::after{content:"";position:absolute;top:100%;left:var(--arrow,50%);margin-left:-5px;border:5px solid transparent;border-top-color:var(--cream)}
+  .samtip.on{opacity:1;visibility:visible}
   /* แผงเสียงมุมขวาบน */
   .sound{position:fixed;top:12px;right:12px;z-index:3;display:flex;align-items:center;gap:8px;
     padding:6px 10px 6px 6px;background:rgba(58,31,43,.66);border:2px solid var(--cream);box-shadow:3px 3px 0 rgba(58,31,43,.55)}
@@ -112,6 +120,7 @@
 </head>
 <body>
 <div class="stage" id="stage"><canvas id="scene" aria-hidden="true"></canvas></div>
+<div class="samtip" id="samTip" role="tooltip"></div>
 <div class="fx"></div>
 
 <main class="ui">
@@ -251,6 +260,7 @@ function build(){
   landed = []; people = [];
   motes = []; for(let i=0;i<22;i++) motes.push(newMote(true));
   for(let i=0;i<3;i++) spawnGroup(rnd(W*.1, W*.9));          // มีคนเดินอยู่แล้วตั้งแต่เปิด
+  if(location.hash==='#samurai') spawnSamurai(W*.35);          // ลิงก์ลงท้าย #samurai = เรียกซามูไรออกมาทันที (ไว้ดูตัวอย่าง)
 }
 
 /* ---------- STEP 3: ท้องฟ้า พระอาทิตย์ ภูเขา เจดีย์ ----------
@@ -536,6 +546,7 @@ function spawnGroup(startAt){
 }
 
 function drawPerson(g,p){
+  if(p.samurai) return drawSamurai(g,p);
   const fx = Math.round(p.x), fy = laneYs[p.lane], d = p.dir;
   const R_ = (lx,ly,w,h,c) => { g.fillStyle=c; g.fillRect(d>0 ? fx+lx : fx-lx-w+1, fy+ly, w, h); };
   const f = Math.floor(p.dist / (p.kid?1.6:(p.old?1.8:2.3))) % 4;
@@ -604,6 +615,119 @@ function drawPerson(g,p){
     }
   }
 }
+
+
+/* ---------- STEP 6.5: ซามูไรผู้ผ่านทาง ----------
+   นานๆ ที (5-10 นาที) จะมีซามูไรใส่หมวกงอบ กิโมโน ฮากามะ ห้อยดาบที่เอว เดินปนกับคนอื่น บางครั้งมากันหลายคน
+   ชุดปลิวตามลม (แขนเสื้อกับชายฮากามะสะบัดด้วย sin) และแต่ละตัวสุ่มออร่าคนละแบบ
+   เอาเม้าส์ชี้ (หรือแตะบนมือถือ) จะมีกล่องคำพูดให้กำลังใจลอยตามตัว */
+const SAM_K=['#2f4a7a','#7a2f3a','#3a5a4a','#e8e0d0','#2a2a33','#5a3a7a','#8a5a2f','#3f6f8f'];
+const SAM_H=['#1f1f28','#3a3346','#4a3a2a','#2f3550','#5a5560','#6a2f2f'];
+const SAM_OBI=['#d8b25a','#c8423b','#e8e0d0','#2a2a2a','#7fb2d9'];
+const SAM_AURA=['sakura','flame','crimson','gold','wind','thunder','moon'];
+const SAM_QUOTES=[
+  'love & peace ❤️','fight for your dream, warrior!!! ⚔️','one step at a time, the path is yours 🌸',
+  'rest is also part of the training 🍵','your focus is your sharpest blade 🗡️','small wins are still wins ✨',
+  'breathe. focus. conquer. 🔥','a calm mind cuts through anything 🌊','the cherry blossoms are cheering for you 🌸',
+  "today's effort becomes tomorrow's strength 💪",'drink some water, young samurai 💧','be gentle with yourself today ☺️',
+  'even the mightiest tree was once a seed 🌱','the moon is proud of you 🌙','keep going, legends are made slowly ⛩️',
+  'protect your dreams like a treasure 💎','a true warrior also takes naps 😴','you are stronger than you think 🛡️',
+  'shine like the sunset ☀️','the journey matters more than the finish 🗻','smile, the wind is on your side 🍃',
+  'courage is quiet, like you 🌾','your future self says thank you 🙏','fall seven times, stand up eight 🌟'];
+let samTimer = rnd(90,300), samHover = null, samHold = 0, samPtr = null;
+const samLum=(a,b)=>{ const A=hx(a),B=hx(b); return Math.abs((A[0]*.3+A[1]*.59+A[2]*.11)-(B[0]*.3+B[1]*.59+B[2]*.11)); };
+function makeSamurai(quote){
+  const k=rpick(SAM_K), h=rpick(SAM_H.filter(c=>c!==k));
+  return {samurai:true, type:'samurai', fem:false, kid:false, old:false, skin:rpick(SKIN), hair:rpick(HAIR),
+    k, kd:mix(k,'#000000',.25), kl:mix(k,'#ffffff',.3), hak:h, hakD:mix(h,'#000000',.3), obi:rpick(SAM_OBI),
+    ph:Math.random()*6.28, dist:Math.random()*20, aura:rpick(SAM_AURA), quote, prop:null, dots:[],
+    saya:['#14101c','#9a2434','#e2d4b4'].sort((x,y)=>samLum(y,h)-samLum(x,h))[0]};   // สีฝักดาบ: เลือกสีที่ตัดกับฮากามะที่สุด
+}
+function spawnSamurai(startAt){
+  const r=Math.random(), n = r<.6 ? 1 : r<.88 ? 2 : 3, dir = Math.random()<.5 ? 1 : -1, speed = rnd(4.5,6);
+  const lane0 = Math.random()<.5 ? 0 : 1, x0 = startAt ?? (dir>0 ? -12 : W+12);
+  const qs = SAM_QUOTES.slice().sort(()=>Math.random()-.5);
+  for(let i=0;i<n;i++){
+    const p = makeSamurai(qs[i]); p.dir=dir; p.speed=speed; p.lane=(lane0+i)%2; p.x = x0 - dir*i*11;
+    people.push(p);
+  }
+}
+function drawSamurai(g,p){
+  const fx=Math.round(p.x), fy=laneYs[p.lane], d=p.dir;
+  const R_ = (lx,ly,w,h,c) => { if(w<=0||h<=0) return; g.fillStyle=c; g.fillRect(d>0 ? fx+lx : fx-lx-w+1, fy+ly, w, h); };
+  samAura(g,p,false);
+  const f=Math.floor(p.dist/2.4)%4, bob=(f===1||f===3)?-1:0, [a,b]=FEET_ADULT[f];
+  const top=-13+bob, hy=top-4, eye='#2a1e1e', wv=(i,s)=>Math.sin(time*s+i*.9+p.ph);
+  g.fillStyle='rgba(70,35,45,.22)'; g.fillRect(fx-4,fy,9,1);
+  R_(b-1,-1,2,1,'#2e2018'); R_(a-1,-1,2,1,'#3d2a20');
+  // แขนเสื้อด้านหลัง ปลิวไปข้างหลัง
+  R_(-3,top+1,2,6,p.kd);
+  for(let i=0;i<6;i++){ const len=1+Math.round((wv(i,6)+1)*1.3); R_(-3-len,top+1+i,len,1,i%2?p.kd:p.k); }
+  // ฮากามะ กางเกงจีบบาน + ชายปลิว
+  R_(-3,top+6,7,-1-(top+6),p.hak); R_(-4,-3,9,2,p.hak);
+  R_(0,top+8,1,-3-(top+8),p.hakD); R_(-3,top+6,1,-1-(top+6),p.hakD);
+  for(let i=0;i<4;i++){ const len=Math.round((wv(i,7)+1)*1.2); R_(-4-len,-2-i,len,1,p.hakD); }
+  // ตัวกิโมโน + คอเสื้อ + โอบิ
+  R_(-2,top,5,6,p.k); R_(-2,top,1,6,p.kd); R_(1,top,1,2,'#efe6d6'); R_(2,top,1,1,'#efe6d6');
+  R_(-2,top+5,5,1,p.obi);
+  // ดาบห้อยเอว: ด้ามชี้ไปข้างหน้า ฝักเฉียงลงไปข้างหลัง
+  R_(2,top+5,1,1,'#d8b25a'); R_(3,top+4,1,1,'#e8e0f0'); R_(4,top+3,1,1,'#1a1424');
+  for(const [x,y] of [[1,6],[0,7],[-1,7],[-2,8],[-3,8],[-4,9],[-5,9],[-6,10]]){ R_(x,top+y,1,1,p.saya); R_(x,top+y+1,1,1,mix(p.saya,'#000000',.35)); }
+  R_(-1,top+8,1,1,'#d8b25a'); R_(-7,top+10,1,2,'#d8b25a');   // เชือกผูกฝัก + ปลายฝักทอง
+  // แขนหน้า วางมือบนด้ามดาบ
+  R_(0,top+1,2,4,p.kd); R_(2,top+4,1,1,p.skin);
+  // หน้า (มีเงาหมวก)
+  R_(-1,hy,4,4,p.skin); R_(-1,hy,4,1,mix(p.skin,'#000000',.35)); R_(-1,hy+1,1,2,p.hair); R_(2,hy+2,1,1,eye);
+  // หมวกงอบ + เชือกคาง ปลิว
+  R_(-4,hy,11,1,'#8a6a3c'); R_(-3,hy-1,9,1,'#c9a46a'); R_(-1,hy-2,5,1,'#d9b77a'); R_(1,hy-3,1,1,'#e6c890'); R_(3,hy-1,2,1,'#e0c088');
+  const cl=Math.round((wv(0,5)+1)*.8); R_(-1-cl,hy+4,1+cl,1,'#c9a46a');
+}
+// ออร่า: back=true วาดในชั้นโลก (หลังตัว), front วาดบนจอหลัก (หน้าตัว + แสงเรือง)
+const samGlowCache={};
+function samGlow(c){ if(samGlowCache[c]) return samGlowCache[c]; const s=document.createElement('canvas'); s.width=s.height=32; const g=s.getContext('2d');
+  const gr=g.createRadialGradient(16,16,0,16,16,16); gr.addColorStop(0,c); gr.addColorStop(1,'rgba(0,0,0,0)'); g.fillStyle=gr; g.fillRect(0,0,32,32); return samGlowCache[c]=s; }
+function samAura(g,p,front){
+  const fx=Math.round(p.x)+.5, fy=laneYs[p.lane], cy=fy-10, t=time+p.ph, k=p.aura, d=p.dir;
+  const dot=(x,y,c,al=1)=>{ g.globalAlpha=al; g.fillStyle=c; g.fillRect(Math.round(x),Math.round(y),1,1); };
+  if(front){
+    const gc={flame:'rgba(90,190,255,.55)',crimson:'rgba(255,90,60,.5)',gold:'rgba(255,215,110,.5)',moon:'rgba(190,160,255,.45)',thunder:'rgba(255,240,140,.35)',sakura:'rgba(255,160,190,.35)',wind:'rgba(255,255,255,.2)'}[k];
+    g.globalCompositeOperation='lighter'; g.globalAlpha=.8+.2*Math.sin(t*2.4); g.drawImage(samGlow(gc),fx-16,cy-16); g.globalCompositeOperation='source-over';
+  }
+  if(k==='sakura'){ for(let i=0;i<14;i++){ const a=t*1.8+i*.449, z=Math.sin(a); if((z>0)!==front) continue; const x=fx+Math.cos(a)*9, y=fy-2-((t*.25+i/14)%1)*22;
+      dot(x,y,i%3?'#ff5f8f':'#ffffff',front?1:.7); if(i%2) dot(x+1,y,'#ffb3c8',front?.9:.6); } }
+  else if(k==='flame'||k==='crimson'){ const C=k==='flame'?['#2b7bff','#5fd0ff','#e8fbff']:['#c8231b','#ff7a2a','#ffe08a'];
+    for(let i=0;i<16;i++){ if((i%2===0)!==front) continue; const h=((t*.9+i/16)%1);
+      dot(fx+Math.sin(i*2.1+t*3)*(6-h*4), fy-1-h*22, C[Math.min(2,Math.floor(h*3))], (1-h)*(front?1:.7)); } }
+  else if(k==='gold'){ for(let i=0;i<12;i++){ if((i%2===0)!==front) continue; const h=((t*.35+i/12)%1), x=fx+Math.sin(i*3.7)*7, y=fy-2-h*24, tw=Math.sin(t*6+i)>.6;
+      dot(x,y,'#ffd86a',1-h); if(tw&&front){ dot(x-1,y,'#fff3c0',.7*(1-h)); dot(x+1,y,'#fff3c0',.7*(1-h)); dot(x,y-1,'#fff3c0',.7*(1-h)); dot(x,y+1,'#fff3c0',.7*(1-h)); } } }
+  else if(k==='wind'){ if(front) for(let i=0;i<6;i++){ const ph=((t*18+i*13)%28), len=2+(i*7)%4, y=fy-3-i*3;
+      for(let j=0;j<len;j++) dot(fx-d*(5+ph+j), y+(j>len-2?1:0), '#ffffff', .75*(1-ph/28)); } }
+  else if(k==='thunder'){ for(let i=0;i<12;i++){ const a=t*2.8+i*.5236, z=Math.sin(a); if((z>0)!==front) continue; dot(fx+Math.cos(a)*7, cy+Math.sin(a*2)*6, i%2?'#fff27a':'#ffffff', front?1:.6); }
+    if(front && (t%1.4)<.16){ let x=fx+(Math.sin(Math.floor(t/1.4)*12.9)>0?6:-6), y=fy-24; g.globalAlpha=.95; g.fillStyle='#fffbd0';
+      while(y<fy-2){ g.fillRect(Math.round(x),Math.round(y),1,2); y+=2; x+=(Math.random()<.5?-1:1); } } }
+  else if(k==='moon'){ for(let r=0;r<2;r++) for(let i=0;i<16;i++){ const a=(r?-1:1)*t*1.4+i*.3927, z=Math.sin(a); if((z>0)!==front) continue;
+      dot(fx+Math.cos(a)*8, fy-6-r*9+z*2, ((i+Math.floor(t*6))%5===0)?'#ffffff':(r?'#c9b6ff':'#8f7cff'), front?.95:.55); } }
+  g.globalAlpha=1;
+}
+// หาซามูไรที่อยู่ใต้ตำแหน่งเม้าส์/นิ้ว
+function samAt(cx,cy){
+  const r=cvs.getBoundingClientRect(), sc=r.width/W, x=(cx-r.left)/sc, y=(cy-r.top)/sc;
+  for(const p of people){ if(!p.samurai) continue; const fy=laneYs[p.lane]; if(Math.abs(x-p.x)<=6 && y>=fy-22 && y<=fy+1) return p; }
+  return null;
+}
+const samTip=document.getElementById('samTip');
+function updateSamTip(){
+  if(samPtr){ const p=samAt(samPtr[0],samPtr[1]); document.documentElement.style.cursor = p ? 'pointer' : ''; if(p){ if(p!==samHover) samTip.textContent=p.quote; samHover=p; samHold=time+1.2; } }
+  if(!samHover || time>samHold || !people.includes(samHover)){ samTip.classList.remove('on'); if(time>samHold) samHover=null; return; }
+  const p=samHover, r=cvs.getBoundingClientRect(), sc=r.width/W, sx=r.left+(p.x+.5)*sc, sy=r.top+(laneYs[p.lane]-23)*sc;
+  const w=samTip.offsetWidth, L=Math.min(Math.max(sx,w/2+8),innerWidth-w/2-8);
+  samTip.style.left=L+'px'; samTip.style.top=sy+'px'; samTip.style.setProperty('--arrow',Math.max(10,Math.min(w-10,w/2+sx-L))+'px');
+  samTip.classList.add('on');
+}
+addEventListener('mousemove',e=>{ samPtr=[e.clientX,e.clientY]; },{passive:true});
+document.addEventListener('mouseleave',()=>{ samPtr=null; document.documentElement.style.cursor=''; });
+document.addEventListener('touchstart',e=>{ if(e.target.closest('button,input,label')) return; const t=e.touches[0], p=samAt(t.clientX,t.clientY);
+  if(p){ samTip.textContent=p.quote; samHover=p; samHold=time+4; } },{passive:true});
 
 /* ---------- STEP 7: กลีบซากุระ (particle system) ----------
    กลีบแต่ละกลีบมี: ความเร็วตก, การส่ายซ้ายขวา (sin), ลมพัด, และ "พลิก" (เปลี่ยนรูปทรง 2x1 / 1x1 / 1x2)
@@ -702,6 +826,7 @@ function frame(now){
   for(const c of clouds){ c.x += c.v*dt; if(c.x > W+10) c.x = -c.w-10; }
   spawnTimer -= dt;
   if(spawnTimer<0){ if(people.length<10) spawnGroup(); spawnTimer = rnd(3,7); }
+  samTimer -= dt; if(samTimer<0){ spawnSamurai(); samTimer = rnd(300,600); }   // ซามูไรโผล่ทุก 5-10 นาที
   for(const p of people){ p.x += p.dir*p.speed*dt; p.dist += p.speed*dt; }
   people = people.filter(p => p.dir>0 ? p.x < W+16 : p.x > -16);
   const wind = 1.5*Math.sin(time*.05) - 1;
@@ -753,8 +878,10 @@ function frame(now){
     wctx.globalAlpha=1; wctx.globalCompositeOperation='source-over';
   }
   ctx.drawImage(world,0,0);
+  for(const p of people) if(p.samurai) samAura(ctx,p,true);
 
   drawLights(glow);
+  updateSamTip();
   requestAnimationFrame(frame);
 }
 
@@ -833,7 +960,15 @@ document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==
 
 // auto run: หมดเวลาแล้วเริ่มรอบถัดไปเอง จนจบ long break แล้วเอาติ๊กออก รอผู้ใช้กด start
 const autoBox = $('auto');
-autoBox.onchange = () => render();
+autoBox.onchange = () => { Sound.click(autoBox.checked?'on':'off'); render(); };
+// เสียงกดปุ่ม (ปุ่มเสียงมีเสียงของตัวเองอยู่แล้ว)
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b || b.id==='mute') return;
+  if(b.id==='start') Sound.click(running?'start':'pause');
+  else if(b.id==='plus'||b.id==='minus') Sound.click(b.id);
+  else if(b.closest('.tabs')) Sound.click('tab');
+  else Sound.click('pop');
+});
 function advance(sound){
   const finished = mode;
   if(sound) chime();
@@ -867,8 +1002,8 @@ $('plus').onclick=()=>adjust(1);
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 addEventListener('keydown',e=>{
   if(e.target.tagName==='BUTTON' && (e.code==='Space'||e.code==='Enter')) return;
-  if(e.code==='Space'){ e.preventDefault(); running?pause():start(); }
-  if(e.key==='r'||e.key==='R') setMode(mode);
+  if(e.code==='Space'){ e.preventDefault(); running?pause():start(); Sound.click(running?'start':'pause'); }
+  if(e.key==='r'||e.key==='R'){ setMode(mode); Sound.click('pop'); }
   if(e.key==='m'||e.key==='M') Sound.toggleMute();
 });
 setMode('focus');
@@ -925,7 +1060,7 @@ const Sound = (() => {
     reverb = ac.createConvolver(); reverb.buffer = impulse(2.8);
     const rv = ac.createGain(); rv.gain.value=.35; reverb.connect(rv).connect(master);
     const mk = (g, wet) => { const n=ac.createGain(); n.gain.value=g; n.connect(master); if(wet){ const s=ac.createGain(); s.gain.value=wet; n.connect(s).connect(reverb); } return n; };
-    bus.wind=mk(.45,.15); bus.birds=mk(.35,.45); bus.crickets=mk(.25,.3); bus.fx=mk(.9,.6);
+    bus.wind=mk(.45,.15); bus.birds=mk(.35,.45); bus.crickets=mk(.25,.3); bus.fx=mk(.9,.6); bus.ui=mk(.8,.3);
     bus.music=mk(.6,.9);
     bus.musicIn=ac.createBiquadFilter(); bus.musicIn.type='lowpass'; bus.musicIn.frequency.value=2800; bus.musicIn.connect(bus.music);   // กรองเสียงแหลมออกให้อุ่นแบบ lo-fi
     whiteBuf=noise(3,false); brownBuf=noise(4,true);
@@ -1116,14 +1251,28 @@ const Sound = (() => {
   function unlock(){
     try{ if(!ac) init(); if(ac.state==='suspended') ac.resume(); }catch(e){}
   }
-  function toggleMute(){ unlock(); muted=!muted; if(!muted && vol<.05) vol=.5; apply(); }
+  // เสียงกดปุ่ม: ดีดโคโตะสั้นๆ เสียงสูงหนึ่งอ็อกเทฟ (ใช้เสียงโคโตะที่เตรียมไว้แล้ว) โน้ตอยู่ในสเกลเดียวกับเพลง
+  function tap(name,t,vel){ const s=ac.createBufferSource(), g=ac.createGain(); s.buffer=koto[name]; s.playbackRate.value=2;
+    g.gain.setValueAtTime(vel,t); g.gain.setTargetAtTime(0,t+.1,.07); s.connect(g).connect(bus.ui); s.start(t); s.stop(t+.7); }
+  function click(kind){
+    unlock(); if(!ac || !koto.A4) return; const t=ac.currentTime+.01;
+    if(kind==='start'){ tap('A4',t,.5); tap('E5',t+.09,.45); }
+    else if(kind==='pause'){ tap('E5',t,.45); tap('A4',t+.09,.4); }
+    else if(kind==='plus') tap('D5',t,.4);
+    else if(kind==='minus') tap('G4',t,.4);
+    else if(kind==='tab') tap('B4',t,.4);
+    else if(kind==='on'){ tap('D5',t,.4); tap('A4',t+.07,.3); }
+    else if(kind==='off') tap('E4',t,.35);
+    else tap('E5',t,.35);
+  }
+  function toggleMute(){ unlock(); muted=!muted; if(!muted && vol<.05) vol=.5; apply(); if(!muted) click('on'); }
   btn.onclick = toggleMute;
   slider.oninput = () => { unlock(); vol=slider.value/100; muted = vol===0; apply(); };
   // เบราว์เซอร์ไม่ให้เล่นเสียงเองจนกว่าผู้ใช้จะแตะหน้าเว็บครั้งแรก
   addEventListener('pointerdown', unlock, {once:true});
   addEventListener('keydown', unlock, {once:true});
   apply();
-  return {unlock, chime, toggleMute};
+  return {unlock, chime, toggleMute, click};
 })();
 
 /* ======================================================================
