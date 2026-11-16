@@ -1,6 +1,6 @@
 // Service worker: keeps a copy of the app so it opens even without internet.
 // When you change index.html, bump the version number below so users get the new version.
-const CACHE = 'sakura-pomodoro-v7';
+const CACHE = 'sakura-pomodoro-v9';
 const FILES = [
   './',
   './index.html',

@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Sakura Pomodoro</title>
 <meta name="theme-color" content="#3a1f2b">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sakura">
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABf0lEQVR4Xu2WMW7CQBBFDcoBaE3tUEKVJjcgR0B0uUOUIyDfwV3EEcgN0qSCktC75QZEszuznp2MzRqEdiPxJIQW1vbMn/k7zrI7F7Asnk/woUvlug8PfTYD8LDyZWEv22QmCL7+OHwN+txz2GfzLQhWgCSHbPN3q0CJEeXzp2aNqoQq8X8U0KDMr0EtAe/wS9HuoZUlegk8y/BGC4FKUH9+h2zP3jZrs48rEV0BtQcoUmM5tBgB2eavO7OsK/trs542+2ePds9q7e6n4UrgnXDC3xKS/Lg/mL9Gk8IGIoLlQXMgQSpDOiUwEcmzHWTc/njRQ/aUOSHXbWok2YTq5OqyIzRcXU1Nln96gP0naw6kfxBJzjpjbH1IinAXkFN4x2t0zgLtHODQgz3Q/zl+m5HdMaLTsWEbJKWTV7GmB9o2dD6kr4CbC5gm1JY3GOBeSqEhcTLyedKF2oTOr9g8XuOx4SL3UZDyDND8T0QvQfA7PH/FassoZI8kugJ3ovMLXtO1k27+Iu0AAAAASUVORK5CYII=">
 <style>
@@ -198,6 +197,7 @@ let time = 0, theme = 0, themeTarget = 0;   // theme 0 = บ่ายแดด�
 /* iPhone/iPad: Safari บางเวอร์ชัน (รวมแอปที่ติดตั้งลงหน้าจอโฮม) รายงานความสูงจอสั้นกว่าจริง ทำให้ขอบล่างลอย
    ถ้าเป็นอุปกรณ์ iOS และหน้าแอปกว้างเต็มจอ ให้ใช้ขนาดจอจริงไปเลย */
 function fullScreenIOS(w,h){
+  return false;   // ตอนนี้ไม่วาดใต้แถบสถานะแล้ว (ตั้งค่าแบบ Neon) ขนาดที่ Safari บอกจึงถูกต้อง ไม่ต้องใช้ขนาดจอจริงอีก
   if(navigator.standalone) return true;
   const ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
   if(!ios) return false;
@@ -944,7 +944,7 @@ function setMode(m){
   hint.textContent='press start to begin'; hint.classList.add('blink');
   render();
 }
-function start(){ ensureAudio(); if(remaining<=0) return; running=true; endAt=performance.now()+remaining*1000; render(); }
+function start(){ ensureAudio(); if(remaining<=0) return; running=true; lastCount=Math.ceil(remaining)>3?0:Math.ceil(remaining); endAt=performance.now()+remaining*1000; render(); }
 function pause(){ remaining=Math.max(0,(endAt-performance.now())/1000); running=false; render(); }
 // มือถือ: ขอให้จอไม่ดับระหว่างจับเวลา (Screen Wake Lock API) ปล่อยเมื่อหยุดหรือออกจากแอป
 let wakeLock=null, wakePending=false;
@@ -979,12 +979,14 @@ function advance(sound){
   }
   if(sound) hint.textContent = mode==='focus' ? 'break is over. press start' : 'well done! press start for a break';
 }
+let lastCount=0;   // นับถอยหลัง 3-2-1 ก่อนหมดเวลา
 setInterval(()=>{
   if(!running) return;
   remaining=Math.max(0,(endAt-performance.now())/1000);
-  if(remaining<=0){ running=false; advance(true); return; }
+  if(remaining<=0){ running=false; lastCount=0; advance(true); return; }
+  const c=Math.ceil(remaining); if(c<=3 && c>=1 && c!==lastCount && total>4){ lastCount=c; Sound.count(c); }
   render();
-},200);
+},100);
 
 const ensureAudio = () => Sound.unlock();
 const chime = () => Sound.chime();
@@ -1265,6 +1267,14 @@ const Sound = (() => {
     else if(kind==='off') tap('E4',t,.35);
     else tap('E5',t,.35);
   }
+  // นับถอยหลัง 3-2-1: เสียง "ติ๊ง" ใสๆ แบบกระดิ่งลม (ฟูริน) ส่วนเสียงตอนหมดเวลายังเป็นแบบเดิม
+  function countTick(n){
+    unlock(); if(!ac) return; const t=ac.currentTime+.01;
+    for(const [f,v,d] of [[1760,.16,.55],[2637,.06,.35],[4186,.025,.2]]){
+      const o=ac.createOscillator(), g=ac.createGain(); o.type='sine'; o.frequency.value=f;
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(v,t+.004); g.gain.exponentialRampToValueAtTime(.0001,t+d);
+      o.connect(g).connect(bus.ui); o.start(t); o.stop(t+d+.05); }
+  }
   function toggleMute(){ unlock(); muted=!muted; if(!muted && vol<.05) vol=.5; apply(); if(!muted) click('on'); }
   btn.onclick = toggleMute;
   slider.oninput = () => { unlock(); vol=slider.value/100; muted = vol===0; apply(); };
@@ -1272,7 +1282,7 @@ const Sound = (() => {
   addEventListener('pointerdown', unlock, {once:true});
   addEventListener('keydown', unlock, {once:true});
   apply();
-  return {unlock, chime, toggleMute, click};
+  return {unlock, chime, toggleMute, click, count:countTick};
 })();
 
 /* ======================================================================
