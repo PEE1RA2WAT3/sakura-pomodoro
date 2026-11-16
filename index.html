@@ -115,6 +115,11 @@
   @supports(padding:env(safe-area-inset-top)){.sound{top:calc(12px + env(safe-area-inset-top))}#install{top:calc(12px + env(safe-area-inset-top))}}
   .keys{position:fixed;bottom:8px;left:0;right:0;z-index:2;text-align:center;font-size:7px;color:rgba(255,244,230,.7);text-shadow:1px 1px 0 var(--ink)}
   @media (max-height:560px),(hover:none){.keys{display:none}}
+  /* พิมพ์ตั้งเวลา: คลิกที่ตัวเลขเวลา หรือกดตัวเลขบนคีย์บอร์ดตอนเวลาไม่เดิน */
+  .time{cursor:text} body.running .time{cursor:default}
+  .timein{font-family:inherit;width:5.6ch;text-align:center;color:inherit;background:transparent;border:0;border-bottom:3px dashed currentColor;
+    outline:none;padding:0;margin:0;caret-color:currentColor}
+  .timein::placeholder{color:inherit;opacity:.35}
 </style>
 </head>
 <body>
@@ -923,6 +928,7 @@ for(let i=0;i<TICKS;i++){
 const fmt = s => { s=Math.ceil(s); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); };
 
 function render(){
+  document.body.classList.toggle('running',running);
   const t=fmt(remaining); timeEl.textContent=t;
   const lit=Math.ceil((remaining/total)*TICKS-1e-9);
   ticks.forEach((r,i)=>{ const on=i<lit; if(on!==r.classList.contains('on')){ r.classList.toggle('on',on); (on?litGroup:dimGroup).append(r);} });
@@ -938,13 +944,14 @@ function render(){
   if(typeof keepAwake==='function') keepAwake(running);
 }
 function setMode(m){
+  if(editing) closeEdit(false);
   mode=m; running=false; total=mins[m]*60; remaining=total;
   themeTarget = m==='focus' ? 0 : 1;
   document.body.classList.toggle('break', m!=='focus');
   hint.textContent='press start to begin'; hint.classList.add('blink');
   render();
 }
-function start(){ ensureAudio(); if(remaining<=0) return; running=true; lastCount=Math.ceil(remaining)>3?0:Math.ceil(remaining); endAt=performance.now()+remaining*1000; render(); }
+function start(){ ensureAudio(); if(editing) closeEdit(true); if(remaining<=0) return; running=true; lastCount=Math.ceil(remaining)>3?0:Math.ceil(remaining); endAt=performance.now()+remaining*1000; render(); }
 function pause(){ remaining=Math.max(0,(endAt-performance.now())/1000); running=false; render(); }
 // มือถือ: ขอให้จอไม่ดับระหว่างจับเวลา (Screen Wake Lock API) ปล่อยเมื่อหยุดหรือออกจากแอป
 let wakeLock=null, wakePending=false;
@@ -992,10 +999,44 @@ const ensureAudio = () => Sound.unlock();
 const chime = () => Sound.chime();
 function adjust(dlt){
   if(running) return;
-  mins[mode]=Math.min(90,Math.max(1,mins[mode]+dlt));
+  mins[mode]=Math.min(Math.max(90,Math.ceil(mins[mode])),Math.max(1,Math.round(mins[mode])+dlt));
   try{ localStorage.setItem('sakura-pomo-mins',JSON.stringify(mins)); }catch(e){}
   total=remaining=mins[mode]*60; render();
 }
+
+/* ---------- พิมพ์ตั้งเวลาด้วยคีย์บอร์ด ----------
+   คลิกที่ตัวเลขเวลา (หรือกดตัวเลขตอนเวลาไม่เดิน): "45" = 45 นาที, "1:30" = 1 นาที 30 วินาที, Enter = ตั้ง, Esc = ยกเลิก */
+var editing=false;
+const timeIn=document.createElement('input');
+timeIn.className='time timein'; timeIn.type='text'; timeIn.inputMode='decimal'; timeIn.maxLength=6; timeIn.autocomplete='off'; timeIn.hidden=true;
+timeIn.setAttribute('aria-label','Type minutes, or minutes:seconds');
+timeEl.after(timeIn);
+function openEdit(first){
+  if(running || editing) return;
+  editing=true; timeIn.value=first||''; timeIn.placeholder=fmt(remaining); timeEl.hidden=true; timeIn.hidden=false;
+  timeIn.focus(); const n=timeIn.value.length; timeIn.setSelectionRange(n,n);
+  hint.textContent='type minutes (or m:ss) + enter'; hint.classList.remove('blink');
+}
+function closeEdit(apply){
+  if(!editing) return; editing=false;
+  const v=timeIn.value.trim().replace('.',':'); timeIn.hidden=true; timeEl.hidden=false;
+  let secs=null;
+  if(apply && v){ const m=v.match(/^(\d{1,3})(?::(\d{1,2}))?$/); if(m) secs=parseInt(m[1],10)*60+(m[2]?parseInt(m[2],10):0); }
+  if(secs!==null){
+    secs=Math.min(180*60,Math.max(5,secs));
+    mins[mode]=secs/60; try{ localStorage.setItem('sakura-pomo-mins',JSON.stringify(mins)); }catch(e){}
+    total=remaining=secs; Sound.click('on');
+  } else if(apply && v) Sound.click('off');
+  hint.textContent='press start to begin'; hint.classList.add('blink'); render();
+}
+timeEl.addEventListener('click',()=>openEdit(''));
+timeIn.addEventListener('input',()=>{ timeIn.value=timeIn.value.replace(/[^0-9:.]/g,''); });
+timeIn.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){ e.preventDefault(); closeEdit(true); }
+  else if(e.key==='Escape'){ e.preventDefault(); closeEdit(false); }
+  e.stopPropagation();
+});
+timeIn.addEventListener('blur',()=>closeEdit(true));
 startBtn.onclick=()=>running?pause():start();
 $('reset').onclick=()=>setMode(mode);
 $('skip').onclick=()=>advance(false);
@@ -1007,6 +1048,7 @@ addEventListener('keydown',e=>{
   if(e.code==='Space'){ e.preventDefault(); running?pause():start(); Sound.click(running?'start':'pause'); }
   if(e.key==='r'||e.key==='R'){ setMode(mode); Sound.click('pop'); }
   if(e.key==='m'||e.key==='M') Sound.toggleMute();
+  if(/^[0-9]$/.test(e.key) && !running && !e.ctrlKey && !e.metaKey && !e.altKey && e.target.tagName!=='INPUT'){ e.preventDefault(); openEdit(e.key); }
 });
 setMode('focus');
 
