@@ -1101,10 +1101,13 @@ const Sound = (() => {
     const limiter = ac.createDynamicsCompressor();          // กันเสียงแตกตอนเปิดดังสุด
     limiter.threshold.value=-6; limiter.ratio.value=8; limiter.connect(ac.destination);
     master = ac.createGain(); master.gain.value = muted ? 0 : vol*vol*GAIN; master.connect(limiter);
+    // เสียงปุ่ม นับถอยหลัง และเสียงหมดเวลา แยกออกมาอีกทาง: ปิดเสียงแล้วยังดังอยู่ (แบบ Neon) ระดับเท่ากับตอนเปิดเสียงครึ่งหนึ่ง
+    alertOut = ac.createGain(); alertOut.gain.value = alertLevel(); alertOut.connect(limiter);
     reverb = ac.createConvolver(); reverb.buffer = impulse(2.8);
     const rv = ac.createGain(); rv.gain.value=.35; reverb.connect(rv).connect(master);
     const mk = (g, wet) => { const n=ac.createGain(); n.gain.value=g; n.connect(master); if(wet){ const s=ac.createGain(); s.gain.value=wet; n.connect(s).connect(reverb); } return n; };
-    bus.wind=mk(.45,.15); bus.birds=mk(.35,.45); bus.crickets=mk(.25,.3); bus.fx=mk(.9,.6); bus.ui=mk(.8,.3);
+    bus.wind=mk(.45,.15); bus.birds=mk(.35,.45); bus.crickets=mk(.25,.3); bus.fx=mk(.9,.6);
+    bus.ui=ac.createGain(); bus.ui.gain.value=.8; bus.ui.connect(alertOut); bus.al=ac.createGain(); bus.al.gain.value=.9; bus.al.connect(alertOut);
     bus.music=mk(.6,.9);
     bus.musicIn=ac.createBiquadFilter(); bus.musicIn.type='lowpass'; bus.musicIn.frequency.value=2800; bus.musicIn.connect(bus.music);   // กรองเสียงแหลมออกให้อุ่นแบบ lo-fi
     whiteBuf=noise(3,false); brownBuf=noise(4,true);
@@ -1277,19 +1280,22 @@ const Sound = (() => {
         const o=ac.createOscillator(), g=ac.createGain();
         o.frequency.value=f*m;
         g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(v,t+.005); g.gain.exponentialRampToValueAtTime(.0001,t+1.6);
-        o.connect(g).connect(bus.fx); o.start(t); o.stop(t+1.7);
+        o.connect(g).connect(bus.al); o.start(t); o.stop(t+1.7);
       });
     });
   }
 
   // แผงควบคุม
   const box=$('sound'), slider=$('vol'), btn=$('mute');
+  let alertOut=null;
+  const alertLevel=()=> (muted||vol<.05) ? .25*GAIN : vol*vol*GAIN;   // ปิดเสียง = ดังคงที่ระดับกลางๆ, เปิดเสียง = ตามแถบระดับเสียง
   function apply(){
     box.classList.toggle('muted', muted);
     btn.setAttribute('aria-label', muted ? 'Turn sound on' : 'Mute sound');
     slider.value=Math.round(vol*100);
     slider.style.backgroundSize = Math.round(vol*100)+'% 100%';
     if(master) master.gain.setTargetAtTime(muted ? 0 : vol*vol*GAIN, ac.currentTime, .08);   // vol² ให้ปรับแล้วรู้สึกเป็นธรรมชาติ
+    if(alertOut) alertOut.gain.setTargetAtTime(alertLevel(), ac.currentTime, .08);
     save();
   }
   function unlock(){
@@ -1317,7 +1323,7 @@ const Sound = (() => {
       g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(v,t+.004); g.gain.exponentialRampToValueAtTime(.0001,t+d);
       o.connect(g).connect(bus.ui); o.start(t); o.stop(t+d+.05); }
   }
-  function toggleMute(){ unlock(); muted=!muted; if(!muted && vol<.05) vol=.5; apply(); if(!muted) click('on'); }
+  function toggleMute(){ unlock(); muted=!muted; if(!muted && vol<.05) vol=.5; apply(); click(muted?'off':'on'); }
   btn.onclick = toggleMute;
   slider.oninput = () => { unlock(); vol=slider.value/100; muted = vol===0; apply(); };
   // เบราว์เซอร์ไม่ให้เล่นเสียงเองจนกว่าผู้ใช้จะแตะหน้าเว็บครั้งแรก
